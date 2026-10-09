@@ -1,0 +1,2557 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Kadrowo-Płacowy | Microsoft Theme</title>
+  <style>
+    /* --- RESET & VARIABLES --- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    }
+
+    body {
+      background-color: #f3f2f1;
+      color: #323130;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* --- TOP BAR (MICROSOFT HEADER) --- */
+    header.ms-header {
+      background-color: #0067b8;
+      color: #ffffff;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.14);
+      position: relative;
+      z-index: 200;
+    }
+
+    .ms-header .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    /* 9-DOTS WAFFLE BUTTON */
+    .waffle-btn {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      grid-template-columns: repeat(3, 4px);
+      gap: 3px;
+      align-content: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 2px;
+      padding: 4px;
+      transition: background 0.15s;
+      background: transparent;
+      border: none;
+    }
+
+    .waffle-btn:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .waffle-btn span {
+      width: 4px;
+      height: 4px;
+      background-color: #ffffff;
+      border-radius: 50%;
+    }
+
+    /* WAFFLE DROPDOWN MENU */
+    .waffle-menu {
+      position: absolute;
+      top: 48px;
+      left: 10px;
+      width: 300px;
+      background: #ffffff;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      border: 1px solid #e1dfdd;
+      border-radius: 4px;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      z-index: 400;
+    }
+
+    .waffle-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 8px;
+      border-radius: 4px;
+      color: #323130;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+      text-align: center;
+    }
+
+    .waffle-item:hover {
+      background-color: #eff6fc;
+      color: #0078d4;
+    }
+
+    .waffle-item svg {
+      width: 24px;
+      height: 24px;
+      fill: #0078d4;
+      margin-bottom: 6px;
+    }
+
+    /* USER PROFILE & DROPDOWN */
+    .user-profile-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: background 0.15s;
+    }
+
+    .user-profile-container:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: #004578;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 13px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .profile-dropdown {
+      position: absolute;
+      right: 0;
+      top: 48px;
+      background: #ffffff;
+      border: 1px solid #e1dfdd;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      border-radius: 4px;
+      width: 170px;
+      z-index: 400;
+      display: flex;
+      flex-direction: column;
+      padding: 4px 0;
+    }
+
+    .profile-dropdown-item {
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #323130;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.12s;
+    }
+
+    .profile-dropdown-item:hover {
+      background-color: #f3f2f1;
+      color: #0078d4;
+    }
+
+    /* --- LAYOUT --- */
+    .app-container {
+      display: flex;
+      flex: 1;
+      height: calc(100vh - 48px);
+    }
+
+    /* --- SIDEBAR --- */
+    aside.ms-sidebar {
+      width: 240px;
+      background-color: #ffffff;
+      border-right: 1px solid #e1dfdd;
+      padding-top: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .nav-list {
+      list-style: none;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 20px;
+      color: #323130;
+      font-size: 14px;
+      cursor: pointer;
+      border-left: 4px solid transparent;
+      transition: all 0.15s ease;
+    }
+
+    .nav-item:hover {
+      background-color: #f3f2f1;
+    }
+
+    .nav-item.active {
+      background-color: #eff6fc;
+      color: #0078d4;
+      font-weight: 600;
+      border-left-color: #0078d4;
+    }
+
+    .nav-item svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    /* --- MAIN CONTENT AREA --- */
+    main.ms-content {
+      flex: 1;
+      padding: 24px 32px;
+      overflow-y: auto;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #201f1e;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* --- CARDS --- */
+    .ms-card {
+      background: #ffffff;
+      border-radius: 4px;
+      border: 1px solid #e1dfdd;
+      box-shadow: 0 1.6px 3.6px 0 rgba(0,0,0,.132), 0 0.3px 0.9px 0 rgba(0,0,0,.108);
+      padding: 20px;
+      margin-bottom: 20px;
+      overflow: visible !important;
+    }
+
+    .ms-card-header {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #f3f2f1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* --- CALENDAR STYLES (SCHEDULE TAB) --- */
+    .calendar-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1px;
+      background-color: #e1dfdd;
+      border: 1px solid #e1dfdd;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .calendar-header-day {
+      background-color: #faf9f8;
+      padding: 10px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 13px;
+      color: #605e5c;
+    }
+
+    .calendar-cell {
+      background-color: #ffffff;
+      min-height: 110px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 12px;
+      vertical-align: top;
+    }
+
+    .calendar-cell.other-month {
+      background-color: #faf9f8;
+      color: #a19f9d;
+    }
+
+    .calendar-day-number {
+      font-weight: 600;
+      font-size: 13px;
+      margin-bottom: 4px;
+      color: #201f1e;
+    }
+
+    .shift-badge {
+      background-color: #eff6fc;
+      color: #0078d4;
+      border: 1px solid #c7e0f4;
+      padding: 3px 6px;
+      border-radius: 3px;
+      font-size: 11px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .shift-badge button {
+      background: transparent;
+      border: none;
+      color: #a80000;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    /* --- PROFILE MODAL STYLING --- */
+    .profile-header-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e1dfdd;
+      margin-bottom: 16px;
+    }
+    .profile-large-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background-color: #004578;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 22px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .profile-info-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #201f1e;
+    }
+    .profile-info-subtitle {
+      font-size: 13px;
+      color: #605e5c;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .profile-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .profile-stat-box {
+      background-color: #faf9f8;
+      border: 1px solid #e1dfdd;
+      border-radius: 4px;
+      padding: 12px 14px;
+    }
+    .profile-stat-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #605e5c;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .profile-stat-value {
+      font-size: 16px;
+      font-weight: 600;
+      color: #201f1e;
+    }
+    .profile-schedule-box {
+      background: #faf9f8;
+      border: 1px solid #e1dfdd;
+      border-radius: 4px;
+      padding: 10px;
+      max-height: 160px;
+      overflow-y: auto;
+    }
+
+    /* --- FORMS & INPUTS --- */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #605e5c;
+    }
+
+    .form-control {
+      height: 32px;
+      padding: 0 10px;
+      border: 1px solid #8a8886;
+      border-radius: 2px;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .form-control:focus {
+      border-color: #0078d4;
+      box-shadow: 0 0 0 1px #0078d4;
+    }
+
+    textarea.form-control {
+      height: auto;
+      min-height: 80px;
+      padding: 8px 10px;
+    }
+
+    /* --- BUTTONS --- */
+    .btn-ms {
+      height: 32px;
+      padding: 0 16px;
+      border-radius: 2px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+    }
+
+    .btn-primary {
+      background-color: #0078d4;
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background-color: #106ebe;
+    }
+
+    .btn-secondary {
+      background-color: #ffffff;
+      color: #323130;
+      border-color: #8a8886;
+    }
+
+    .btn-secondary:hover {
+      background-color: #f3f2f1;
+    }
+
+    .btn-success {
+      background-color: #107c41;
+      color: #ffffff;
+    }
+
+    .btn-success:hover {
+      background-color: #0b5a30;
+    }
+
+    .btn-danger-soft {
+      background-color: #fde7e9;
+      color: #a80000;
+      border: 1px solid #f8a5a8;
+    }
+
+    .btn-danger-soft:hover {
+      background-color: #fbd4d7;
+    }
+
+    /* --- TABLES & ACTIONS --- */
+    .ms-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      overflow: visible !important;
+    }
+
+    .ms-table th {
+      text-align: left;
+      padding: 10px;
+      background-color: #faf9f8;
+      color: #605e5c;
+      font-weight: 600;
+      border-bottom: 1px solid #e1dfdd;
+    }
+
+    .ms-table td {
+      padding: 10px;
+      border-bottom: 1px solid #f3f2f1;
+      vertical-align: middle;
+      position: relative;
+      overflow: visible !important;
+    }
+
+    .ms-table tr:hover {
+      background-color: #f3f2f1;
+      cursor: pointer;
+    }
+
+    .dots-btn {
+      background: transparent;
+      border: none;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 2px;
+      color: #605e5c;
+    }
+
+    .dots-btn:hover {
+      background-color: #e1dfdd;
+      color: #323130;
+    }
+
+    .action-dropdown {
+      position: absolute;
+      right: 15px;
+      top: 30px;
+      background: #ffffff;
+      border: 1px solid #e1dfdd;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+      border-radius: 4px;
+      width: 190px;
+      z-index: 300;
+      display: flex;
+      flex-direction: column;
+      padding: 4px 0;
+    }
+
+    .action-item {
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #323130;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.12s;
+    }
+
+    .action-item:hover {
+      background-color: #eff6fc;
+      color: #0078d4;
+    }
+
+    .action-item.delete:hover {
+      background-color: #fde7e9;
+      color: #a80000;
+    }
+
+    /* --- BADGES --- */
+    .badge {
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    .badge-normal { background-color: #dff6dd; color: #107c41; }
+    .badge-urlop { background-color: #fff4ce; color: #797775; }
+    .badge-l4 { background-color: #fde7e9; color: #a80000; }
+    .badge-swieto { background-color: #e1dfdd; color: #323130; }
+    .badge-pending { background-color: #fff4ce; color: #8a6d3b; }
+    .badge-accepted { background-color: #dff6dd; color: #107c41; }
+    .badge-rejected { background-color: #fde7e9; color: #a80000; }
+
+    /* --- MODALS --- */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-box {
+      background: #ffffff;
+      width: 580px;
+      max-width: 90%;
+      border-radius: 4px;
+      box-shadow: 0 25.6px 57.6px 0 rgba(0,0,0,.22);
+      padding: 24px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header class="ms-header">
+    <div class="logo-container">
+      <button class="waffle-btn" id="waffleBtn" title="Menu aplikacji Microsoft">
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+      </button>
+      <span>System Kadrowo-Płacowy</span>
+    </div>
+
+    <!-- 9-DOTS WAFFLE DROPDOWN MENU -->
+    <div class="waffle-menu hidden" id="waffleMenu">
+      <div class="waffle-item admin-only-tab" data-tab="tab-users">
+        <svg viewBox="0 0 20 20"><path d="M10 2a4 4 0 100 8 4 4 0 000-8zM3 16a5 5 0 0110 0H3z"/></svg>
+        Pracownicy
+      </div>
+      <div class="waffle-item admin-only-tab" data-tab="tab-groups">
+        <svg viewBox="0 0 20 20"><path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm0 2h12v3H4V5zm0 5h5v5H4v-5zm7 0h5v5h-5v-5z"/></svg>
+        Oddziały
+      </div>
+      <div class="waffle-item" data-tab="tab-schedule">
+        <svg viewBox="0 0 20 20"><path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5h8v2H6V7z"/></svg>
+        Grafik Pracy
+      </div>
+      <div class="waffle-item" data-tab="tab-calendar">
+        <svg viewBox="0 0 20 20"><path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5h8v2H6V7z"/></svg>
+        Urlopy / L4
+      </div>
+      <div class="waffle-item" data-tab="tab-messages">
+        <svg viewBox="0 0 20 20"><path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3.5 2a.5.5 0 000 1h9a.5.5 0 000-1h-9zm0 3a.5.5 0 000 1h9a.5.5 0 000-1h-9zm0 3a.5.5 0 000 1h5a.5.5 0 000-1h-5z"/></svg>
+        Wiadomości
+      </div>
+      <div class="waffle-item" data-tab="tab-payroll">
+        <svg viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm2 3h8v2H6V7zm0 4h5v2H6v-2z"/></svg>
+        Wynagrodzenia
+      </div>
+    </div>
+
+    <!-- USER PROFILE & DROPDOWN -->
+    <div class="user-profile-container" id="userProfileContainer">
+      <span id="currentUserNavName" style="font-size: 13px;">Niezalogowany</span>
+      <div class="user-avatar" id="currentUserAvatar">--</div>
+      
+      <div class="profile-dropdown hidden" id="profileDropdown">
+        <div class="profile-dropdown-item" id="dropdownViewProfile">Wyświetl profil</div>
+        <div class="profile-dropdown-item" id="dropdownLogout">Wyloguj</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- LEFT SIDEBAR -->
+    <aside class="ms-sidebar" id="mainSidebar">
+      <ul class="nav-list">
+        <li class="nav-item admin-only-tab" data-tab="tab-users">
+          <svg viewBox="0 0 20 20"><path d="M10 2a4 4 0 100 8 4 4 0 000-8zM3 16a5 5 0 0110 0H3z"/></svg>
+          Pracownicy
+        </li>
+        <li class="nav-item admin-only-tab" data-tab="tab-groups">
+          <svg viewBox="0 0 20 20"><path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm0 2h12v3H4V5zm0 5h5v5H4v-5zm7 0h5v5h-5v-5z"/></svg>
+          Grupy (Oddziały)
+        </li>
+        <li class="nav-item active" data-tab="tab-schedule">
+          <svg viewBox="0 0 20 20"><path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5h8v2H6V7z"/></svg>
+          Grafik Pracy
+        </li>
+        <li class="nav-item" data-tab="tab-calendar">
+          <svg viewBox="0 0 20 20"><path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5h8v2H6V7z"/></svg>
+          Kalendarz, Urlopy & L4
+        </li>
+        <li class="nav-item" data-tab="tab-messages">
+          <svg viewBox="0 0 20 20"><path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3.5 2a.5.5 0 000 1h9a.5.5 0 000-1h-9zm0 3a.5.5 0 000 1h9a.5.5 0 000-1h-9zm0 3a.5.5 0 000 1h5a.5.5 0 000-1h-5z"/></svg>
+          Wiadomości
+        </li>
+        <li class="nav-item" data-tab="tab-payroll">
+          <svg viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm2 3h8v2H6V7zm0 4h5v2H6v-2z"/></svg>
+          Księgowość & Płace
+        </li>
+      </ul>
+      <div style="padding: 16px; font-size: 11px; color: #a19f9d; text-align: center;">
+        Microsoft Theme &bull; 2026
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="ms-content">
+
+      <!-- TAB 1: PRACOWNICY (Tylko Admin) -->
+      <section id="tab-users" class="tab-content hidden">
+        <div class="page-title">
+          <span>Pracownicy i Użytkownicy Systemu</span>
+          <button class="btn-ms btn-primary admin-only" id="openAddUserModalBtn">+ Utwórz nowe konto</button>
+        </div>
+
+        <div class="ms-card">
+          <div class="ms-card-header">Lista aktywnych kont w systemie</div>
+          <table class="ms-table">
+            <thead>
+              <tr>
+                <th>Imię i Nazwisko</th>
+                <th>Login</th>
+                <th>Oddział</th>
+                <th>Rola</th>
+                <th>Próg Płacowy</th>
+                <th>Stawka/h</th>
+                <th style="width: 50px;">Opcje</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody">
+              <tr><td colspan="7">Ładowanie danych...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 2: ODDZIAŁY (Tylko Admin) -->
+      <section id="tab-groups" class="tab-content hidden">
+        <div class="page-title">
+          <span>Oddziały i Grupy Firmowe</span>
+          <button class="btn-ms btn-primary admin-only" id="openAddGroupModalBtn">+ Utwórz nowy oddział</button>
+        </div>
+
+        <div class="ms-card">
+          <div class="ms-card-header">Zarejestrowane oddziały</div>
+          <table class="ms-table">
+            <thead>
+              <tr>
+                <th>Nazwa Oddziału</th>
+                <th>Opis / Lokalizacja</th>
+                <th style="width: 50px;">Opcje</th>
+              </tr>
+            </thead>
+            <tbody id="groupsTableBody">
+              <tr><td colspan="3">Ładowanie danych...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 3: GRAFIK PRACY (Pierwszy ekran pracownika) -->
+      <section id="tab-schedule" class="tab-content">
+        <h1 class="page-title">Grafik Pracy (Miesięczny Kalendarz)</h1>
+
+        <div class="ms-card admin-only">
+          <div class="ms-card-header">Generuj grafik na zakres dat (np. cały miesiąc)</div>
+          <form id="formAddSchedule">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Pracownik</label>
+                <select id="schedUserSelect" class="form-control" required></select>
+              </div>
+              <div class="form-group">
+                <label>Data od</label>
+                <input type="date" id="schedDateFrom" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label>Data do</label>
+                <input type="date" id="schedDateTo" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label>Godziny pracy (od - do)</label>
+                <div style="display: flex; gap: 6px;">
+                  <input type="time" id="schedTimeFrom" class="form-control" value="08:00" required>
+                  <input type="time" id="schedTimeTo" class="form-control" value="16:00" required>
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn-ms btn-primary">Generuj grafik</button>
+          </form>
+        </div>
+
+        <div class="ms-card">
+          <div class="calendar-nav">
+            <button class="btn-ms btn-secondary" id="prevMonthBtn">&lt; Poprzedni miesiąc</button>
+            <h2 id="calendarTitle" style="font-size: 18px; font-weight: 600; color: #201f1e;">Miesiąc Rok</h2>
+            <button class="btn-ms btn-secondary" id="nextMonthBtn">Następny miesiąc &gt;</button>
+          </div>
+          <div class="calendar-grid" id="calendarGridContainer"></div>
+        </div>
+      </section>
+
+      <!-- TAB 4: KALENDARZ, URLOPY, L4 -->
+      <section id="tab-calendar" class="tab-content hidden">
+        <div class="page-title">
+          <span>Kalendarz Pracy, Urlopów i L4</span>
+          <button class="btn-ms btn-primary" id="openLeaveModalBtn">+ Nowy Wniosek Urlopowy</button>
+        </div>
+
+        <div class="ms-card">
+          <div class="ms-card-header">Dostępność pracowników (Dzisiaj)</div>
+          <table class="ms-table">
+            <thead>
+              <tr>
+                <th>Pracownik</th>
+                <th>Oddział</th>
+                <th>Dzisiejszy status</th>
+              </tr>
+            </thead>
+            <tbody id="employeeStatusTableBody">
+              <tr><td colspan="3">Ładowanie statusów...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="ms-card">
+          <div class="ms-card-header">Wnioski Urlopowe (Moje i Firmowe)</div>
+          <table class="ms-table">
+            <thead>
+              <tr>
+                <th>Pracownik</th>
+                <th>Typ wniosku</th>
+                <th>Zakres dat</th>
+                <th>Status</th>
+                <th>Akcje</th>
+              </tr>
+            </thead>
+            <tbody id="leaveRequestsTableBody">
+              <tr><td colspan="5">Brak wniosków...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="ms-card">
+          <div class="ms-card-header">Zatwierdzone absencje i święta w kalendarzu</div>
+          <table class="ms-table">
+            <thead>
+              <tr>
+                <th>Pracownik / Dzień</th>
+                <th>Typ</th>
+                <th>Zakres dat</th>
+                <th>Akcje</th>
+              </tr>
+            </thead>
+            <tbody id="calendarEventsTableBody">
+              <tr><td colspan="4">Brak wpisów...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 5: MODUŁ WIADOMOŚCI -->
+      <section id="tab-messages" class="tab-content hidden">
+        <div class="page-title">
+          <span>Moduł Wiadomości (Komunikator)</span>
+          <button class="btn-ms btn-primary" id="openSendMessageModalBtn">+ Nowa wiadomość</button>
+        </div>
+
+        <div class="ms-card">
+          <div class="ms-card-header">
+            <span>Skrzynka Odbiorcza (Otrzymane wiadomości)</span>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn-ms btn-secondary" style="height: 26px; font-size: 11px;" onclick="selectAllInbox()">Zaznacz wszystkie</button>
+              <button class="btn-ms btn-danger-soft" style="height: 26px; font-size: 11px;" onclick="deleteSelectedInbox()">Usuń zaznaczone</button>
+            </div>
+          </div>
+          <table class="ms-table">
+            <thead>
+              <tr>
+                <th style="width: 30px;"><input type="checkbox" id="masterInboxCheck" onchange="toggleAllInbox(this)"></th>
+                <th>Data</th>
+                <th>Od kogo</th>
+                <th>Temat</th>
+                <th>Typ odbiorcy</th>
+                <th style="width: 50px;">Opcje</th>
+              </tr>
+            </thead>
+            <tbody id="inboxTableBody">
+              <tr><td colspan="6">Brak wiadomości w skrzynce odbiorczej.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="ms-card">
+          <div class="ms-card-header">
+            <span>Wiadomości Wysłane</span>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn-ms btn-secondary" style="height: 26px; font-size: 11px;" onclick="selectAllSent()">Zaznacz wszystkie</button>
+              <button class="btn-ms btn-danger-soft" style="height: 26px; font-size: 11px;" onclick="deleteSelectedSent()">Usuń zaznaczone</button>
+            </div>
+          </div>
+          <table class="ms-table">
+            <thead>
+              <tr>
+                <th style="width: 30px;"><input type="checkbox" id="masterSentCheck" onchange="toggleAllSent(this)"></th>
+                <th>Data</th>
+                <th>Odbiorca (Użytkownik / Oddział)</th>
+                <th>Temat</th>
+                <th style="width: 50px;">Opcje</th>
+              </tr>
+            </thead>
+            <tbody id="sentTableBody">
+              <tr><td colspan="5">Brak wysłanych wiadomości.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="ms-card">
+          <div class="ms-card-header">
+            <span>Kosz (Usunięte wiadomości)</span>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn-ms btn-secondary" style="height: 26px; font-size: 11px;" onclick="selectAllTrash()">Zaznacz wszystkie</button>
+              <button class="btn-ms btn-success" style="height: 26px; font-size: 11px;" onclick="restoreSelectedTrash()">Przywróć zaznaczone</button>
+              <button class="btn-ms btn-danger-soft" style="height: 26px; font-size: 11px;" onclick="permanentDeleteSelectedTrash()">Usuń trwale</button>
+            </div>
+          </div>
+          <table class="ms-table">
+            <thead>
+              <tr>
+                <th style="width: 30px;"><input type="checkbox" id="masterTrashCheck" onchange="toggleAllTrash(this)"></th>
+                <th>Data</th>
+                <th>Nadawca / Odbiorca</th>
+                <th>Temat</th>
+                <th style="width: 50px;">Opcje</th>
+              </tr>
+            </thead>
+            <tbody id="trashTableBody">
+              <tr><td colspan="5">Kosz jest pusty.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 6: KSIĘGOWOŚĆ I PŁACE -->
+      <section id="tab-payroll" class="tab-content hidden">
+        <h1 class="page-title">Księgowość i Wynagrodzenia</h1>
+        <div class="ms-card">
+          <div class="ms-card-header">Wyliczenie wynagrodzeń (Godziny z Grafiku * Stawka/h)</div>
+          <table class="ms-table">
+            <thead>
+              <tr>
+                <th>Pracownik</th>
+                <th>Oddział</th>
+                <th>Stawka za h</th>
+                <th>Przepracowane godz. (Grafik)</th>
+                <th>Dni L4 / Urlop</th>
+                <th>Szacowane Wynagrodzenie</th>
+              </tr>
+            </thead>
+            <tbody id="payrollTableBody">
+              <tr><td colspan="6">Ładowanie płac...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- MODAL: INITIAL SETUP -->
+  <div class="modal-overlay hidden" id="modalSetup">
+    <div class="modal-box">
+      <div class="modal-header">Pierwsze Uruchomienie Systemu</div>
+      <p style="font-size: 13px; color: #605e5c; margin-bottom: 16px;">
+        W bazie nie wykryto kont. Stwórz pierwsze konto z pełnymi uprawnieniami <strong>Administratora</strong>.
+      </p>
+      <form id="formSetupAdmin">
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label>Imię i Nazwisko</label>
+          <input type="text" id="setupName" class="form-control" required placeholder="np. Główny Admin">
+        </div>
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label>Login</label>
+          <input type="text" id="setupLogin" class="form-control" required placeholder="admin">
+        </div>
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label>Hasło</label>
+          <input type="password" id="setupPassword" class="form-control" required placeholder="admin123">
+        </div>
+        <button type="submit" class="btn-ms btn-primary" style="width: 100%;">Utwórz Konto Administratora</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: LOGIN -->
+  <div class="modal-overlay hidden" id="modalLogin">
+    <div class="modal-box">
+      <div class="modal-header">Zaloguj się do systemu</div>
+      <form id="formLogin">
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label>Login</label>
+          <input type="text" id="loginUsername" class="form-control" required placeholder="login">
+        </div>
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label>Hasło</label>
+          <input type="password" id="loginPassword" class="form-control" required placeholder="hasło">
+        </div>
+        <div id="loginError" style="color: #a80000; font-size: 12px; margin-bottom: 12px;" class="hidden">
+          Nieprawidłowy login lub hasło.
+        </div>
+        <button type="submit" class="btn-ms btn-primary" style="width: 100%;">Zaloguj się</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: WYMUSZENIE ZMIANY HASŁA -->
+  <div class="modal-overlay hidden" id="modalChangePassword">
+    <div class="modal-box">
+      <div class="modal-header">Zmiana hasła wymagana</div>
+      <p style="font-size: 13px; color: #605e5c; margin-bottom: 16px;">
+        To Twoje pierwsze logowanie. Ze względów bezpieczeństwa musisz zmienić hasło tymczasowe na własne.
+      </p>
+      <form id="formChangePassword">
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label>Nowe hasło</label>
+          <input type="password" id="newPasswordInput" class="form-control" required placeholder="Wpisz nowe hasło">
+        </div>
+        <button type="submit" class="btn-ms btn-primary" style="width: 100%;">Zapisz i przejdź do systemu</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: DODAWANIE PRACOWNIKA -->
+  <div class="modal-overlay hidden" id="modalAddUser">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span>Dodaj nowego pracownika</span>
+        <button class="btn-ms btn-secondary" onclick="closeModal('modalAddUser')">X</button>
+      </div>
+      <form id="formAddUser">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Imię i Nazwisko</label>
+            <input type="text" id="addName" class="form-control" required placeholder="np. Anna Nowak">
+          </div>
+          <div class="form-group">
+            <label>Login</label>
+            <input type="text" id="addLogin" class="form-control" required placeholder="anowak">
+          </div>
+          <div class="form-group">
+            <label>Hasło tymczasowe</label>
+            <input type="text" id="addPassword" class="form-control" required placeholder="haslo123">
+          </div>
+          <div class="form-group">
+            <label>Oddział / Grupa</label>
+            <select id="addDepartment" class="form-control"></select>
+          </div>
+          <div class="form-group">
+            <label>Rola w systemie</label>
+            <select id="addRole" class="form-control">
+              <option value="Pracownik">Pracownik</option>
+              <option value="Administrator">Administrator</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Próg Wynagrodzenia</label>
+            <select id="addSalaryTier" class="form-control">
+              <option value="Minimalna krajowa">Minimalna krajowa (~4 300 PLN)</option>
+              <option value="Średnia krajowa" selected>Średnia krajowa (~8 150 PLN)</option>
+              <option value="Najwyższa krajowa">Najwyższa krajowa (12 000+ PLN)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Stawka za godzinę (PLN/h)</label>
+            <input type="number" step="0.5" id="addHourlyRate" class="form-control" placeholder="35.00" value="35">
+          </div>
+        </div>
+        <button type="submit" class="btn-ms btn-primary" style="width: 100%; margin-top: 10px;">Utwórz konto pracownika</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: DODAWANIE ODDZIAŁU -->
+  <div class="modal-overlay hidden" id="modalAddGroup">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span>Dodaj nowy oddział</span>
+        <button class="btn-ms btn-secondary" onclick="closeModal('modalAddGroup')">X</button>
+      </div>
+      <form id="formAddGroup">
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label>Nazwa oddziału / grupy</label>
+          <input type="text" id="addGroupName" class="form-control" required placeholder="np. Oddział Kraków / IT">
+        </div>
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label>Lokalizacja / Opis</label>
+          <input type="text" id="addGroupDesc" class="form-control" placeholder="np. Biuro Regionalne">
+        </div>
+        <button type="submit" class="btn-ms btn-primary" style="width: 100%;">Utwórz oddział</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: SKŁADANIE WNIOSKU URLOPOWEGO -->
+  <div class="modal-overlay hidden" id="modalLeaveRequest">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span>Złóż wniosek urlopowy</span>
+        <button class="btn-ms btn-secondary" onclick="closeModal('modalLeaveRequest')">X</button>
+      </div>
+      <form id="formLeaveRequest">
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label>Typ urlopu</label>
+          <select id="leaveType" class="form-control">
+            <option value="Urlop płatny">Urlop płatny</option>
+            <option value="Urlop bezpłatny">Urlop bezpłatny</option>
+            <option value="L4 (Zwolnienie)">Zwolnienie L4</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label>Data startu</label>
+          <input type="date" id="leaveStartDate" class="form-control" required>
+        </div>
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label>Data końca</label>
+          <input type="date" id="leaveEndDate" class="form-control" required>
+        </div>
+        <button type="submit" class="btn-ms btn-primary" style="width: 100%;">Wyślij wniosek</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: WYSYŁANIE WIADOMOŚCI -->
+  <div class="modal-overlay hidden" id="modalSendMessage">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span>Nowa wiadomość</span>
+        <button class="btn-ms btn-secondary" onclick="closeModal('modalSendMessage')">X</button>
+      </div>
+      <form id="formSendMessage">
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label>Typ odbiorcy</label>
+          <select id="msgRecipientType" class="form-control" onchange="toggleRecipientField()">
+            <option value="user">Konkretny użytkownik</option>
+            <option value="department">Cały oddział</option>
+          </select>
+        </div>
+        <div class="form-group" id="groupUserSelectContainer" style="margin-bottom: 12px;">
+          <label>Wybierz użytkownika</label>
+          <select id="msgTargetUser" class="form-control"></select>
+        </div>
+        <div class="form-group hidden" id="groupDeptSelectContainer" style="margin-bottom: 12px;">
+          <label>Wybierz oddział</label>
+          <select id="msgTargetDept" class="form-control"></select>
+        </div>
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label>Temat</label>
+          <input type="text" id="msgSubject" class="form-control" required placeholder="Wpisz temat wiadomości">
+        </div>
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label>Treść wiadomości</label>
+          <textarea id="msgBody" class="form-control" required placeholder="Wpisz treść wiadomości..."></textarea>
+        </div>
+        <button type="submit" class="btn-ms btn-primary" style="width: 100%;">Wyślij wiadomość</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: PODGLĄD WIADOMOŚCI -->
+  <div class="modal-overlay hidden" id="modalViewMessage">
+    <div class="modal-box" style="width: 600px;">
+      <div class="modal-header">
+        <span id="viewMsgSubjectTitle">Szczegóły Wiadomości</span>
+        <button class="btn-ms btn-secondary" onclick="closeModal('modalViewMessage')">X</button>
+      </div>
+      <div style="background: #faf9f8; border: 1px solid #e1dfdd; border-radius: 4px; padding: 14px; margin-bottom: 16px;">
+        <div style="font-size: 13px; color: #605e5c; margin-bottom: 6px;" id="viewMsgFrom"><strong>Od:</strong> --</div>
+        <div style="font-size: 13px; color: #605e5c; margin-bottom: 12px;" id="viewMsgDate"><strong>Data:</strong> --</div>
+        <hr style="border: none; border-top: 1px solid #e1dfdd; margin-bottom: 12px;">
+        <div style="font-size: 14px; color: #323130; line-height: 1.5; white-space: pre-wrap;" id="viewMsgBody">--</div>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 8px;">
+        <button class="btn-ms btn-secondary" onclick="promptMoveToTrashCurrent()">Przenieś do kosza</button>
+        <button class="btn-ms btn-danger-soft" onclick="promptPermanentDeleteCurrent()">Usuń trwale</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: POTWIERDZONY DIALOG USUWANIA (KOSZ / TRWAŁE) -->
+  <div class="modal-overlay hidden" id="modalConfirmDelete">
+    <div class="modal-box" style="width: 420px;">
+      <div class="modal-header">Potwierdź usunięcie</div>
+      <p style="font-size: 13px; color: #605e5c; margin-bottom: 20px;" id="confirmDeleteText">
+        Co chcesz zrobić z zaznaczoną wiadomością?
+      </p>
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button class="btn-ms btn-secondary" onclick="closeModal('modalConfirmDelete')">Anuluj</button>
+        <button class="btn-ms btn-secondary" style="border-color: #8a8886;" id="confirmTrashBtn">Przenieś do kosza</button>
+        <button class="btn-ms btn-danger-soft" id="confirmPermanentBtn">Usuń trwale</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: PODGLĄD PRACOWNIKA (PROFIL) -->
+  <div class="modal-overlay hidden" id="modalViewUser">
+    <div class="modal-box" style="width: 620px;">
+      <div class="modal-header">
+        <span>Profil Użytkownika</span>
+        <button class="btn-ms btn-secondary" onclick="closeModal('modalViewUser')">X</button>
+      </div>
+      <div id="viewUserBody"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: EDYCJA PRACOWNIKA -->
+  <div class="modal-overlay hidden" id="modalEditUser">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span>Edycja Pracownika i Grafiku</span>
+        <button class="btn-ms btn-secondary" onclick="closeModal('modalEditUser')">X</button>
+      </div>
+      <form id="formEditUser">
+        <input type="hidden" id="editUserId">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Imię i Nazwisko</label>
+            <input type="text" id="editName" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Login</label>
+            <input type="text" id="editLogin" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Hasło</label>
+            <input type="text" id="editPassword" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Oddział / Grupa</label>
+            <select id="editDepartment" class="form-control"></select>
+          </div>
+          <div class="form-group">
+            <label>Rola</label>
+            <select id="editRole" class="form-control">
+              <option value="Pracownik">Pracownik</option>
+              <option value="Administrator">Administrator</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Próg Płacowy</label>
+            <select id="editSalaryTier" class="form-control">
+              <option value="Minimalna krajowa">Minimalna krajowa</option>
+              <option value="Średnia krajowa">Średnia krajowa</option>
+              <option value="Najwyższa krajowa">Najwyższa krajowa</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Stawka za godzinę (PLN/h)</label>
+            <input type="number" step="0.5" id="editHourlyRate" class="form-control" required>
+          </div>
+        </div>
+        <div style="margin: 16px 0; border-top: 1px solid #e1dfdd; padding-top: 12px;">
+          <label style="font-weight: 600; font-size: 13px; display: block; margin-bottom: 8px;">Harmonogram / Grafik pracownika:</label>
+          <div id="editUserScheduleList" style="max-height: 140px; overflow-y: auto; font-size: 12px; background: #faf9f8; border: 1px solid #e1dfdd; padding: 8px; border-radius: 2px;">
+            Brak wpisów w grafiku.
+          </div>
+        </div>
+        <button type="submit" class="btn-ms btn-primary" style="width: 100%;">Zapisz zmiany</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: EDYCJA ODDZIAŁU -->
+  <div class="modal-overlay hidden" id="modalEditGroup">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span>Edycja Oddziału</span>
+        <button class="btn-ms btn-secondary" onclick="closeModal('modalEditGroup')">X</button>
+      </div>
+      <form id="formEditGroup">
+        <input type="hidden" id="editGroupId">
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label>Nazwa Oddziału</label>
+          <input type="text" id="editGroupName" class="form-control" required>
+        </div>
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label>Opis / Lokalizacja</label>
+          <input type="text" id="editGroupDesc" class="form-control">
+        </div>
+        <button type="submit" class="btn-ms btn-primary" style="width: 100%;">Zapisz zmiany</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- FIREBASE MODULE & SCRIPT LOGIC -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { 
+      getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, where 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA_a5g1dEAl3WJkbsyru3Fsn-3pnI7aL7w",
+      authDomain: "si-kkp.firebaseapp.com",
+      projectId: "si-kkp",
+      storageBucket: "si-kkp.firebasestorage.app",
+      messagingSenderId: "516742288632",
+      appId: "1:516742288632:web:36eb4fd691d23be46fd70d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let currentUser = null;
+    let pendingLoginUserDoc = null;
+    let usersList = [];
+    let groupsList = [];
+    let calendarEvents = [];
+    let scheduleList = [];
+    let leaveRequestsList = [];
+    let messagesList = [];
+    let currentCalendarDate = new Date();
+    let currentViewingMessage = null;
+    let pendingDeleteAction = null;
+
+    window.addEventListener("DOMContentLoaded", async () => {
+      setupWaffleAndNav();
+      setupProfileDropdown();
+      setupModalTriggers();
+      setupCalendarNav();
+      setupClickOutside();
+      await checkInitialData();
+    });
+
+    function setupWaffleAndNav() {
+      const waffleBtn = document.getElementById("waffleBtn");
+      const waffleMenu = document.getElementById("waffleMenu");
+
+      waffleBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        waffleMenu.classList.toggle("hidden");
+      });
+
+      const allNavItems = document.querySelectorAll(".nav-item, .waffle-item");
+      allNavItems.forEach(item => {
+        item.addEventListener("click", () => {
+          const targetTab = item.getAttribute("data-tab");
+
+          document.querySelectorAll(".nav-item").forEach(i => {
+            if(i.getAttribute("data-tab") === targetTab) i.classList.add("active");
+            else i.classList.remove("active");
+          });
+
+          document.querySelectorAll(".tab-content").forEach(tab => tab.classList.add("hidden"));
+          document.getElementById(targetTab).classList.remove("hidden");
+
+          waffleMenu.classList.add("hidden");
+          if (targetTab === "tab-schedule") {
+            renderScheduleCalendar();
+          } else if (targetTab === "tab-messages") {
+            loadMessages();
+          }
+        });
+      });
+    }
+
+    function setupProfileDropdown() {
+      const profileContainer = document.getElementById("userProfileContainer");
+      const profileDropdown = document.getElementById("profileDropdown");
+      const dropdownViewProfile = document.getElementById("dropdownViewProfile");
+      const dropdownLogout = document.getElementById("dropdownLogout");
+
+      profileContainer.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (currentUser) {
+          profileDropdown.classList.toggle("hidden");
+        }
+      });
+
+      dropdownViewProfile.addEventListener("click", () => {
+        profileDropdown.classList.add("hidden");
+        if (currentUser) {
+          viewUser(currentUser.id);
+        }
+      });
+
+      dropdownLogout.addEventListener("click", () => {
+        profileDropdown.classList.add("hidden");
+        logoutUser();
+      });
+    }
+
+    function setupModalTriggers() {
+      document.getElementById("openAddUserModalBtn").addEventListener("click", () => {
+        document.getElementById("modalAddUser").classList.remove("hidden");
+      });
+
+      document.getElementById("openAddGroupModalBtn").addEventListener("click", () => {
+        document.getElementById("modalAddGroup").classList.remove("hidden");
+      });
+
+      document.getElementById("openLeaveModalBtn").addEventListener("click", () => {
+        document.getElementById("modalLeaveRequest").classList.remove("hidden");
+      });
+
+      document.getElementById("openSendMessageModalBtn").addEventListener("click", () => {
+        populateMessageRecipients();
+        document.getElementById("modalSendMessage").classList.remove("hidden");
+      });
+    }
+
+    window.toggleRecipientField = () => {
+      const type = document.getElementById("msgRecipientType").value;
+      if (type === "user") {
+        document.getElementById("groupUserSelectContainer").classList.remove("hidden");
+        document.getElementById("groupDeptSelectContainer").classList.add("hidden");
+      } else {
+        document.getElementById("groupUserSelectContainer").classList.add("hidden");
+        document.getElementById("groupDeptSelectContainer").classList.remove("hidden");
+      }
+    };
+
+    function populateMessageRecipients() {
+      const userSel = document.getElementById("msgTargetUser");
+      const deptSel = document.getElementById("msgTargetDept");
+
+      userSel.innerHTML = "";
+      deptSel.innerHTML = "";
+
+      usersList.forEach(u => {
+        if (currentUser && u.id !== currentUser.id) {
+          userSel.add(new Option(`${u.name} (${u.department || 'Brak'})`, u.id));
+        }
+      });
+
+      groupsList.forEach(g => {
+        deptSel.add(new Option(g.name, g.name));
+      });
+    }
+
+    function setupCalendarNav() {
+      document.getElementById("prevMonthBtn").addEventListener("click", () => {
+        currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
+        renderScheduleCalendar();
+      });
+
+      document.getElementById("nextMonthBtn").addEventListener("click", () => {
+        currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
+        renderScheduleCalendar();
+      });
+    }
+
+    function setupClickOutside() {
+      document.addEventListener("click", () => {
+        document.getElementById("waffleMenu").classList.add("hidden");
+        document.getElementById("profileDropdown").classList.add("hidden");
+        closeAllDropdowns();
+      });
+    }
+
+    function closeAllDropdowns() {
+      document.querySelectorAll(".action-dropdown").forEach(el => el.remove());
+    }
+
+    window.closeModal = (modalId) => {
+      document.getElementById(modalId).classList.add("hidden");
+    };
+
+    async function checkInitialData() {
+      try {
+        const usersSnapshot = await getDocs(collection(db, "users"));
+        if (usersSnapshot.empty) {
+          document.getElementById("modalSetup").classList.remove("hidden");
+        } else {
+          document.getElementById("modalLogin").classList.remove("hidden");
+        }
+      } catch (err) {
+        console.error("Błąd połączenia z Firebase:", err);
+      }
+    }
+
+    document.getElementById("formSetupAdmin").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("setupName").value.trim();
+      const login = document.getElementById("setupLogin").value.trim();
+      const password = document.getElementById("setupPassword").value.trim();
+
+      await addDoc(collection(db, "users"), {
+        name, login, password, role: "Administrator",
+        department: "Zarząd / Biuro", salaryTier: "Najwyższa krajowa", hourlyRate: 80, 
+        isFirstLogin: false, createdAt: new Date()
+      });
+
+      await addDoc(collection(db, "departments"), {
+        name: "Zarząd / Biuro", description: "Główny oddział firmy"
+      });
+
+      document.getElementById("modalSetup").classList.add("hidden");
+      alert("Utworzono konto Administratora. Zaloguj się.");
+      document.getElementById("modalLogin").classList.remove("hidden");
+    });
+
+    document.getElementById("formLogin").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const loginInput = document.getElementById("loginUsername").value.trim();
+      const passwordInput = document.getElementById("loginPassword").value.trim();
+
+      const q = query(collection(db, "users"), where("login", "==", loginInput), where("password", "==", passwordInput));
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        document.getElementById("loginError").classList.remove("hidden");
+      } else {
+        const userDoc = querySnapshot.docs[0];
+        const userData = userDoc.data();
+
+        if (userData.isFirstLogin === true) {
+          pendingLoginUserDoc = { id: userDoc.id, ...userData };
+          document.getElementById("modalLogin").classList.add("hidden");
+          document.getElementById("modalChangePassword").classList.remove("hidden");
+        } else {
+          currentUser = { id: userDoc.id, ...userData };
+          document.getElementById("modalLogin").classList.add("hidden");
+          onLoginSuccess();
+        }
+      }
+    });
+
+    document.getElementById("formChangePassword").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const newPassword = document.getElementById("newPasswordInput").value.trim();
+      if (!newPassword) return;
+
+      await updateDoc(doc(db, "users", pendingLoginUserDoc.id), {
+        password: newPassword,
+        isFirstLogin: false
+      });
+
+      currentUser = { ...pendingLoginUserDoc, password: newPassword, isFirstLogin: false };
+      pendingLoginUserDoc = null;
+      document.getElementById("formChangePassword").reset();
+      document.getElementById("modalChangePassword").classList.add("hidden");
+      alert("Hasło zostało pomyślnie zmienione!");
+      onLoginSuccess();
+    });
+
+    function onLoginSuccess() {
+      document.getElementById("currentUserNavName").textContent = currentUser.name;
+      document.getElementById("currentUserAvatar").textContent = currentUser.name.split(" ").map(n => n[0]).join("").toUpperCase();
+
+      document.querySelectorAll(".admin-only").forEach(el => {
+        if (currentUser.role === "Administrator") el.classList.remove("hidden");
+        else el.classList.add("hidden");
+      });
+
+      document.querySelectorAll(".admin-only-tab").forEach(el => {
+        if (currentUser.role === "Administrator") el.classList.remove("hidden");
+        else el.classList.add("hidden");
+      });
+
+      if (currentUser.role === "Pracownik") {
+        document.querySelectorAll(".nav-item").forEach(i => i.classList.remove("active"));
+        document.querySelector('.nav-item[data-tab="tab-schedule"]').classList.add("active");
+
+        document.querySelectorAll(".tab-content").forEach(tab => tab.classList.add("hidden"));
+        document.getElementById("tab-schedule").classList.remove("hidden");
+      } else {
+        document.querySelectorAll(".nav-item").forEach(i => i.classList.remove("active"));
+        document.querySelector('.nav-item[data-tab="tab-users"]').classList.add("active");
+
+        document.querySelectorAll(".tab-content").forEach(tab => tab.classList.add("hidden"));
+        document.getElementById("tab-users").classList.remove("hidden");
+      }
+
+      loadAllData();
+    }
+
+    function logoutUser() {
+      currentUser = null;
+      document.getElementById("currentUserNavName").textContent = "Niezalogowany";
+      document.getElementById("currentUserAvatar").textContent = "--";
+      document.getElementById("formLogin").reset();
+      document.getElementById("modalLogin").classList.remove("hidden");
+    }
+
+    // ODDZIAŁY
+    async function loadDepartments() {
+      const snapshot = await getDocs(collection(db, "departments"));
+      groupsList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      const tbody = document.getElementById("groupsTableBody");
+      const addDeptSel = document.getElementById("addDepartment");
+      const editDeptSel = document.getElementById("editDepartment");
+
+      tbody.innerHTML = "";
+      addDeptSel.innerHTML = "<option value='Brak'>-- Wybierz oddział --</option>";
+      editDeptSel.innerHTML = "<option value='Brak'>-- Wybierz oddział --</option>";
+
+      groupsList.forEach(grp => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${grp.name}</strong></td>
+          <td>${grp.description || '-'}</td>
+          <td>
+            <button class="dots-btn" onclick="toggleDeptMenu(event, '${grp.id}')">&#8942;</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+
+        addDeptSel.add(new Option(grp.name, grp.name));
+        editDeptSel.add(new Option(grp.name, grp.name));
+      });
+    }
+
+    document.getElementById("formAddGroup").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("addGroupName").value.trim();
+      const description = document.getElementById("addGroupDesc").value.trim();
+      await addDoc(collection(db, "departments"), { name, description });
+      document.getElementById("formAddGroup").reset();
+      closeModal("modalAddGroup");
+      await loadDepartments();
+      alert("Oddział został pomyślnie dodany!");
+    });
+
+    window.toggleDeptMenu = (e, grpId) => {
+      e.stopPropagation();
+      closeAllDropdowns();
+      const btn = e.target;
+      const td = btn.parentElement;
+
+      const dropdown = document.createElement("div");
+      dropdown.className = "action-dropdown";
+      dropdown.innerHTML = `
+        ${currentUser.role === 'Administrator' ? `
+          <div class="action-item" onclick="openEditGroup('${grpId}')">Edytuj oddział</div>
+          <div class="action-item delete" onclick="deleteDept('${grpId}')">Usuń oddział</div>
+        ` : '<div class="action-item">Brak dostępnych akcji</div>'}
+      `;
+      td.appendChild(dropdown);
+    };
+
+    window.openEditGroup = (id) => {
+      const g = groupsList.find(x => x.id === id);
+      if (!g) return;
+      document.getElementById("editGroupId").value = g.id;
+      document.getElementById("editGroupName").value = g.name;
+      document.getElementById("editGroupDesc").value = g.description || '';
+      document.getElementById("modalEditGroup").classList.remove("hidden");
+    };
+
+    document.getElementById("formEditGroup").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const id = document.getElementById("editGroupId").value;
+      await updateDoc(doc(db, "departments", id), {
+        name: document.getElementById("editGroupName").value.trim(),
+        description: document.getElementById("editGroupDesc").value.trim()
+      });
+      document.getElementById("modalEditGroup").classList.add("hidden");
+      await loadDepartments();
+    });
+
+    window.deleteDept = async (id) => {
+      if (confirm("Czy na pewno usunąć ten oddział?")) {
+        await deleteDoc(doc(db, "departments", id));
+        await loadDepartments();
+      }
+    };
+
+    // PRACOWNICY
+    async function loadUsers() {
+      const snapshot = await getDocs(collection(db, "users"));
+      usersList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      const tbody = document.getElementById("usersTableBody");
+      const schedSel = document.getElementById("schedUserSelect");
+
+      tbody.innerHTML = "";
+      schedSel.innerHTML = "";
+
+      usersList.forEach(usr => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${usr.name}</strong></td>
+          <td>${usr.login}</td>
+          <td>${usr.department || 'Brak'}</td>
+          <td><span class="badge ${usr.role === 'Administrator' ? 'badge-l4' : 'badge-normal'}">${usr.role}</span></td>
+          <td>${usr.salaryTier || 'Średnia krajowa'}</td>
+          <td><strong>${usr.hourlyRate || 35} PLN/h</strong></td>
+          <td>
+            <button class="dots-btn" onclick="toggleUserMenu(event, '${usr.id}')">&#8942;</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+
+        schedSel.add(new Option(`${usr.name} (${usr.department || 'Brak'})`, usr.id));
+      });
+    }
+
+    document.getElementById("formAddUser").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const newUser = {
+        name: document.getElementById("addName").value.trim(),
+        login: document.getElementById("addLogin").value.trim(),
+        password: document.getElementById("addPassword").value.trim(),
+        department: document.getElementById("addDepartment").value,
+        role: document.getElementById("addRole").value,
+        salaryTier: document.getElementById("addSalaryTier").value,
+        hourlyRate: parseFloat(document.getElementById("addHourlyRate").value) || 35,
+        isFirstLogin: true,
+        createdAt: new Date()
+      };
+
+      await addDoc(collection(db, "users"), newUser);
+      document.getElementById("formAddUser").reset();
+      closeModal("modalAddUser");
+      await loadUsers();
+      renderPayroll();
+      alert("Konto pracownika zostało utworzone pomyślnie!");
+    });
+
+    window.toggleUserMenu = (e, userId) => {
+      e.stopPropagation();
+      closeAllDropdowns();
+      const btn = e.target;
+      const td = btn.parentElement;
+
+      const dropdown = document.createElement("div");
+      dropdown.className = "action-dropdown";
+      dropdown.innerHTML = `
+        <div class="action-item" onclick="viewUser('${userId}')">Zarządzanie kontem</div>
+        ${currentUser.role === 'Administrator' ? `
+          <div class="action-item" onclick="openEditUser('${userId}')">Edytuj pracownika</div>
+          <div class="action-item delete" onclick="deleteUser('${userId}')">Usuń konto</div>
+        ` : ''}
+      `;
+      td.appendChild(dropdown);
+    };
+
+    window.viewUser = (id) => {
+      const u = usersList.find(x => x.id === id);
+      if (!u) return;
+
+      const userSchedules = scheduleList.filter(s => s.userId === u.id);
+      const totalHours = userSchedules.reduce((acc, curr) => acc + (curr.hours || 0), 0);
+      const totalPayout = (totalHours * (u.hourlyRate || 35)).toFixed(2);
+      const initials = u.name.split(" ").map(n => n[0]).join("").toUpperCase();
+
+      let scheduleHtml = `<div style="font-size: 12px; color: #605e5c; text-align: center; padding: 10px;">Brak wpisów w grafiku.</div>`;
+      if (userSchedules.length > 0) {
+        scheduleHtml = `<div style="display: flex; flex-direction: column; gap: 6px;">`;
+        userSchedules.forEach(s => {
+          scheduleHtml += `<div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; background: #ffffff; padding: 8px 12px; border: 1px solid #e1dfdd; border-radius: 3px;">
+            <span><strong>📅 ${s.date}</strong></span>
+            <span>🕒 ${s.timeFrom} - ${s.timeTo} <strong style="color: #0078d4; margin-left: 6px;">(${s.hours} h)</strong></span>
+          </div>`;
+        });
+        scheduleHtml += `</div>`;
+      }
+
+      document.getElementById("viewUserBody").innerHTML = `
+        <div class="profile-header-card">
+          <div class="profile-large-avatar">${initials}</div>
+          <div>
+            <div class="profile-info-title">${u.name}</div>
+            <div class="profile-info-subtitle">
+              <span>🏢 ${u.department || 'Brak oddziału'}</span> &bull; 
+              <span class="badge ${u.role === 'Administrator' ? 'badge-l4' : 'badge-normal'}">${u.role}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-stats-grid">
+          <div class="profile-stat-box">
+            <div class="profile-stat-label">Stawka godzinowa</div>
+            <div class="profile-stat-value">💰 ${u.hourlyRate || 35} PLN/h</div>
+          </div>
+          <div class="profile-stat-box">
+            <div class="profile-stat-label">Próg płacowy</div>
+            <div class="profile-stat-value" style="font-size: 13px; line-height: 1.4; margin-top: 2px;">📊 ${u.salaryTier || 'Średnia krajowa'}</div>
+          </div>
+          <div class="profile-stat-box">
+            <div class="profile-stat-label">Przepracowane godziny</div>
+            <div class="profile-stat-value">⏱️ ${totalHours} h</div>
+          </div>
+          <div class="profile-stat-box">
+            <div class="profile-stat-label">Szacowane wynagrodzenie</div>
+            <div class="profile-stat-value" style="color: #107c41;">💵 ${totalPayout} PLN</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 6px; font-weight: 600; font-size: 13px; color: #605e5c;">Dane uwierzytelniające:</div>
+        <div style="background: #faf9f8; border: 1px solid #e1dfdd; border-radius: 4px; padding: 10px 14px; margin-bottom: 16px; font-size: 13px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <div><strong>Login:</strong> ${u.login}</div>
+          <div><strong>Hasło:</strong> ${u.password}</div>
+        </div>
+
+        <div style="margin-bottom: 6px; font-weight: 600; font-size: 13px; color: #605e5c;">Harmonogram pracy pracownika:</div>
+        <div class="profile-schedule-box">
+          ${scheduleHtml}
+        </div>
+      `;
+      document.getElementById("modalViewUser").classList.remove("hidden");
+    };
+
+    window.openEditUser = (id) => {
+      const u = usersList.find(x => x.id === id);
+      if (!u) return;
+
+      document.getElementById("editUserId").value = u.id;
+      document.getElementById("editName").value = u.name;
+      document.getElementById("editLogin").value = u.login;
+      document.getElementById("editPassword").value = u.password;
+      document.getElementById("editDepartment").value = u.department || 'Brak';
+      document.getElementById("editRole").value = u.role;
+      document.getElementById("editSalaryTier").value = u.salaryTier || 'Średnia krajowa';
+      document.getElementById("editHourlyRate").value = u.hourlyRate || 35;
+
+      const userSchedules = scheduleList.filter(s => s.userId === u.id);
+      const schedListContainer = document.getElementById("editUserScheduleList");
+      if (userSchedules.length === 0) {
+        schedListContainer.innerHTML = "Brak wpisów w grafiku.";
+      } else {
+        let html = "";
+        userSchedules.forEach(s => {
+          html += `<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <span>${s.date} (${s.timeFrom}-${s.timeTo}, ${s.hours}h)</span>
+            <button type="button" class="btn-ms btn-danger-soft" style="height: 22px; padding: 0 6px; font-size: 11px;" onclick="deleteScheduleFromEdit('${s.id}', '${u.id}')">Usuń</button>
+          </div>`;
+        });
+        schedListContainer.innerHTML = html;
+      }
+
+      document.getElementById("modalEditUser").classList.remove("hidden");
+    };
+
+    document.getElementById("formEditUser").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const id = document.getElementById("editUserId").value;
+      const updatedData = {
+        name: document.getElementById("editName").value.trim(),
+        login: document.getElementById("editLogin").value.trim(),
+        password: document.getElementById("editPassword").value.trim(),
+        department: document.getElementById("editDepartment").value,
+        role: document.getElementById("editRole").value,
+        salaryTier: document.getElementById("editSalaryTier").value,
+        hourlyRate: parseFloat(document.getElementById("editHourlyRate").value) || 35
+      };
+
+      await updateDoc(doc(db, "users", id), updatedData);
+      document.getElementById("modalEditUser").classList.add("hidden");
+      await loadUsers();
+      renderPayroll();
+    });
+
+    window.deleteUser = async (id) => {
+      if (confirm("Czy na pewno usunąć to konto pracownika?")) {
+        await deleteDoc(doc(db, "users", id));
+        await loadUsers();
+        renderPayroll();
+      }
+    };
+
+    // GRAFIK PRACY (KALENDARZ MIESIĘCZNY)
+    async function loadSchedules() {
+      const snapshot = await getDocs(collection(db, "schedules"));
+      scheduleList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      renderScheduleCalendar();
+    }
+
+    function renderScheduleCalendar() {
+      const year = currentCalendarDate.getFullYear();
+      const month = currentCalendarDate.getMonth();
+
+      const monthNames = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"];
+      document.getElementById("calendarTitle").textContent = `${monthNames[month]} ${year}`;
+
+      const grid = document.getElementById("calendarGridContainer");
+      grid.innerHTML = "";
+
+      const daysOfWeek = ["Pon", "Wt", "Śr", "Czw", "Pt", "Sob", "Niedz"];
+      daysOfWeek.forEach(d => {
+        const headerDiv = document.createElement("div");
+        headerDiv.className = "calendar-header-day";
+        headerDiv.textContent = d;
+        grid.appendChild(headerDiv);
+      });
+
+      const firstDay = new Date(year, month, 1);
+      let startingDay = firstDay.getDay();
+      if (startingDay === 0) startingDay = 7;
+      startingDay -= 1;
+
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+      for (let i = startingDay - 1; i >= 0; i--) {
+        const dayNum = daysInPrevMonth - i;
+        const prevMonth = month === 0 ? 11 : month - 1;
+        const prevYear = month === 0 ? year - 1 : year;
+        const dateStr = `${prevYear}-${String(prevMonth + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
+        appendCalendarCell(grid, dayNum, dateStr, true);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        appendCalendarCell(grid, day, dateStr, false);
+      }
+
+      const totalCellsSoFar = startingDay + daysInMonth;
+      const totalGridCells = totalCellsSoFar <= 35 ? 35 : 42;
+      const remainingCells = totalGridCells - totalCellsSoFar;
+
+      for (let day = 1; day <= remainingCells; day++) {
+        const nextMonth = month === 11 ? 0 : month + 1;
+        const nextYear = month === 11 ? year + 1 : year;
+        const dateStr = `${nextYear}-${String(nextMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        appendCalendarCell(grid, day, dateStr, true);
+      }
+    }
+
+    function appendCalendarCell(grid, dayNum, dateStr, isOtherMonth) {
+      const cell = document.createElement("div");
+      cell.className = `calendar-cell ${isOtherMonth ? 'other-month' : ''}`;
+      
+      const dayHeader = document.createElement("div");
+      dayHeader.className = "calendar-day-number";
+      dayHeader.textContent = dayNum;
+      cell.appendChild(dayHeader);
+
+      const daySchedules = scheduleList.filter(s => {
+        if (s.date !== dateStr) return false;
+        if (currentUser && currentUser.role === 'Pracownik') {
+          return s.userId === currentUser.id;
+        }
+        return true;
+      });
+      
+      const shiftsContainer = document.createElement("div");
+      shiftsContainer.style.display = "flex";
+      shiftsContainer.style.flexDirection = "column";
+      shiftsContainer.style.gap = "3px";
+      shiftsContainer.style.overflowY = "auto";
+      shiftsContainer.style.maxHeight = "90px";
+
+      daySchedules.forEach(sch => {
+        const usr = usersList.find(u => u.id === sch.userId);
+        const name = usr ? usr.name.split(" ")[0] : 'Pracownik';
+        
+        const badge = document.createElement("div");
+        badge.className = "shift-badge";
+        badge.innerHTML = `<span><strong>${name}</strong>: ${sch.timeFrom}-${sch.timeTo}</span>`;
+        
+        if (currentUser && currentUser.role === 'Administrator') {
+          const delBtn = document.createElement("button");
+          delBtn.textContent = "×";
+          delBtn.title = "Usuń zmianę";
+          delBtn.onclick = (e) => {
+            e.stopPropagation();
+            deleteSchedule(sch.id);
+          };
+          badge.appendChild(delBtn);
+        }
+
+        shiftsContainer.appendChild(badge);
+      });
+
+      cell.appendChild(shiftsContainer);
+      grid.appendChild(cell);
+    }
+
+    document.getElementById("formAddSchedule").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const userId = document.getElementById("schedUserSelect").value;
+      const dateFrom = document.getElementById("schedDateFrom").value;
+      const dateTo = document.getElementById("schedDateTo").value;
+      const timeFrom = document.getElementById("schedTimeFrom").value;
+      const timeTo = document.getElementById("schedTimeTo").value;
+
+      const fromParts = timeFrom.split(":");
+      const toParts = timeTo.split(":");
+      const hours = Math.max(0, (parseInt(toParts[0]) + parseInt(toParts[1])/60) - (parseInt(fromParts[0]) + parseInt(fromParts[1])/60));
+
+      let currDate = new Date(dateFrom);
+      const endDate = new Date(dateTo);
+
+      while (currDate <= endDate) {
+        const dateStr = currDate.toISOString().split('T')[0];
+        
+        await addDoc(collection(db, "schedules"), {
+          userId, date: dateStr, timeFrom, timeTo, hours: parseFloat(hours.toFixed(1))
+        });
+
+        currDate.setDate(currDate.getDate() + 1);
+      }
+
+      document.getElementById("formAddSchedule").reset();
+      await loadSchedules();
+      renderPayroll();
+      alert("Grafik został wygenerowany i zaktualizowany w kalendarzu!");
+    });
+
+    window.deleteSchedule = async (id) => {
+      if (confirm("Usuń ten wpis z grafiku?")) {
+        await deleteDoc(doc(db, "schedules", id));
+        await loadSchedules();
+        renderPayroll();
+      }
+    };
+
+    window.deleteScheduleFromEdit = async (schedId, userId) => {
+      await deleteDoc(doc(db, "schedules", schedId));
+      await loadSchedules();
+      renderPayroll();
+      openEditUser(userId);
+    };
+
+    // MODUŁ WIADOMOŚCI
+    async function loadMessages() {
+      const snapshot = await getDocs(collection(db, "messages"));
+      messagesList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      const inboxTbody = document.getElementById("inboxTableBody");
+      const sentTbody = document.getElementById("sentTableBody");
+      const trashTbody = document.getElementById("trashTableBody");
+
+      inboxTbody.innerHTML = "";
+      sentTbody.innerHTML = "";
+      trashTbody.innerHTML = "";
+
+      // 1. Wysłane (które nie są w koszu użytkownika)
+      const sentMessages = messagesList.filter(m => m.senderId === currentUser.id && !m.deletedBySender);
+      if (sentMessages.length === 0) {
+        sentTbody.innerHTML = `<tr><td colspan="5">Brak wysłanych wiadomości.</td></tr>`;
+      } else {
+        sentMessages.forEach(m => {
+          const dateStr = m.createdAt ? new Date(m.createdAt.seconds * 1000).toLocaleString() : 'Dzisiaj';
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td><input type="checkbox" class="sent-checkbox" value="${m.id}" onclick="event.stopPropagation()"></td>
+            <td>${dateStr}</td>
+            <td><strong>${m.recipientName}</strong></td>
+            <td><strong>${m.subject}</strong></td>
+            <td>
+              <button class="dots-btn" onclick="toggleMsgMenu(event, '${m.id}', 'sent')">&#8942;</button>
+            </td>
+          `;
+          tr.onclick = () => openMessageView(m.id);
+          sentTbody.appendChild(tr);
+        });
+      }
+
+      // 2. Odebrane (bezpośrednio do niego lub na jego oddział, nie w koszu)
+      const inboxMessages = messagesList.filter(m => {
+        if (m.deletedForRecipient) return false;
+        if (m.recipientType === 'user' && m.recipientId === currentUser.id) return true;
+        if (m.recipientType === 'department' && m.recipientName === currentUser.department) return true;
+        return false;
+      });
+
+      if (inboxMessages.length === 0) {
+        inboxTbody.innerHTML = `<tr><td colspan="6">Brak wiadomości w skrzynce odbiorczej.</td></tr>`;
+      } else {
+        inboxMessages.forEach(m => {
+          const dateStr = m.createdAt ? new Date(m.createdAt.seconds * 1000).toLocaleString() : 'Dzisiaj';
+          const recipientBadge = m.recipientType === 'department' 
+            ? `<span class="badge badge-urlop">Oddział: ${m.recipientName}</span>` 
+            : `<span class="badge badge-normal">Bezpośrednia</span>`;
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td><input type="checkbox" class="inbox-checkbox" value="${m.id}" onclick="event.stopPropagation()"></td>
+            <td>${dateStr}</td>
+            <td><strong>${m.senderName}</strong></td>
+            <td><strong>${m.subject}</strong></td>
+            <td>${recipientBadge}</td>
+            <td>
+              <button class="dots-btn" onclick="toggleMsgMenu(event, '${m.id}', 'inbox')">&#8942;</button>
+            </td>
+          `;
+          tr.onclick = () => openMessageView(m.id);
+          inboxTbody.appendChild(tr);
+        });
+      }
+
+      // 3. Kosz (wiadomości usunięte przez aktualnego użytkownika)
+      const trashMessages = messagesList.filter(m => {
+        if (m.senderId === currentUser.id && m.deletedBySender) return true;
+        if (m.recipientType === 'user' && m.recipientId === currentUser.id && m.deletedForRecipient) return true;
+        if (m.recipientType === 'department' && m.recipientName === currentUser.department && m.deletedForRecipient) return true;
+        return false;
+      });
+
+      if (trashMessages.length === 0) {
+        trashTbody.innerHTML = `<tr><td colspan="5">Kosz jest pusty.</td></tr>`;
+      } else {
+        trashMessages.forEach(m => {
+          const dateStr = m.createdAt ? new Date(m.createdAt.seconds * 1000).toLocaleString() : 'Dzisiaj';
+          const label = m.senderId === currentUser.id ? `Do: ${m.recipientName}` : `Od: ${m.senderName}`;
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td><input type="checkbox" class="trash-checkbox" value="${m.id}" onclick="event.stopPropagation()"></td>
+            <td>${dateStr}</td>
+            <td>${label}</td>
+            <td><strong>${m.subject}</strong></td>
+            <td>
+              <button class="btn-ms btn-success" style="height: 24px; font-size: 11px; padding: 0 6px;" onclick="restoreMessage('${m.id}')">Przywróć</button>
+            </td>
+          `;
+          trashTbody.appendChild(tr);
+        });
+      }
+    }
+
+    window.toggleMsgMenu = (e, msgId, folder) => {
+      e.stopPropagation();
+      closeAllDropdowns();
+      const btn = e.target;
+      const td = btn.parentElement;
+
+      const dropdown = document.createElement("div");
+      dropdown.className = "action-dropdown";
+      dropdown.innerHTML = `
+        <div class="action-item" onclick="promptMoveToTrash('${msgId}', '${folder}')">Przenieś do kosza</div>
+        <div class="action-item delete" onclick="promptPermanentDelete('${msgId}')">Usuń trwale</div>
+      `;
+      td.appendChild(dropdown);
+    };
+
+    window.openMessageView = (msgId) => {
+      const m = messagesList.find(x => x.id === msgId);
+      if (!m) return;
+      currentViewingMessage = m;
+
+      document.getElementById("viewMsgSubjectTitle").textContent = m.subject;
+      document.getElementById("viewMsgFrom").innerHTML = `<strong>Od:</strong> ${m.senderName} (${m.recipientType === 'department' ? 'Oddział: ' + m.recipientName : 'Bezpośrednia'})`;
+      document.getElementById("viewMsgDate").innerHTML = `<strong>Data:</strong> ${m.createdAt ? new Date(m.createdAt.seconds * 1000).toLocaleString() : 'Dzisiaj'}`;
+      document.getElementById("viewMsgBody").textContent = m.body;
+
+      document.getElementById("modalViewMessage").classList.remove("hidden");
+    };
+
+    window.promptMoveToTrashCurrent = () => {
+      if (!currentViewingMessage) return;
+      closeModal("modalViewMessage");
+      promptMoveToTrash(currentViewingMessage.id, currentViewingMessage.senderId === currentUser.id ? 'sent' : 'inbox');
+    };
+
+    window.promptPermanentDeleteCurrent = () => {
+      if (!currentViewingMessage) return;
+      closeModal("modalViewMessage");
+      promptPermanentDelete(currentViewingMessage.id);
+    };
+
+    window.promptMoveToTrash = (msgId, folder) => {
+      pendingDeleteAction = { type: 'trash', ids: [msgId], folder };
+      document.getElementById("confirmDeleteText").textContent = "Czy na pewno chcesz przenieść tę wiadomość do kosza?";
+      document.getElementById("confirmTrashBtn").style.display = "inline-flex";
+      document.getElementById("confirmPermanentBtn").textContent = "Usuń trwale";
+      document.getElementById("modalConfirmDelete").classList.remove("hidden");
+    };
+
+    window.promptPermanentDelete = (msgId) => {
+      pendingDeleteAction = { type: 'permanent', ids: [msgId] };
+      document.getElementById("confirmDeleteText").textContent = "Czy na pewno chcesz trwale usunąć tę wiadomość? Tej operacji nie można cofnąć.";
+      document.getElementById("confirmTrashBtn").style.display = "none";
+      document.getElementById("confirmPermanentBtn").textContent = "Tak, usuń trwale";
+      document.getElementById("modalConfirmDelete").classList.remove("hidden");
+    };
+
+    document.getElementById("confirmTrashBtn").addEventListener("click", async () => {
+      if (!pendingDeleteAction) return;
+      closeModal("modalConfirmDelete");
+      for (const id of pendingDeleteAction.ids) {
+        const m = messagesList.find(x => x.id === id);
+        if (m) {
+          if (m.senderId === currentUser.id) {
+            await updateDoc(doc(db, "messages", id), { deletedBySender: true });
+          } else {
+            await updateDoc(doc(db, "messages", id), { deletedForRecipient: true });
+          }
+        }
+      }
+      pendingDeleteAction = null;
+      await loadMessages();
+    });
+
+    document.getElementById("confirmPermanentBtn").addEventListener("click", async () => {
+      if (!pendingDeleteAction) return;
+      closeModal("modalConfirmDelete");
+      for (const id of pendingDeleteAction.ids) {
+        await deleteDoc(doc(db, "messages", id));
+      }
+      pendingDeleteAction = null;
+      await loadMessages();
+    });
+
+    // MASOWE OPERACJE
+    window.toggleAllInbox = (master) => {
+      document.querySelectorAll(".inbox-checkbox").forEach(cb => cb.checked = master.checked);
+    };
+    window.selectAllInbox = () => {
+      const master = document.getElementById("masterInboxCheck");
+      master.checked = !master.checked;
+      toggleAllInbox(master);
+    };
+    window.deleteSelectedInbox = () => {
+      const ids = Array.from(document.querySelectorAll(".inbox-checkbox:checked")).map(cb => cb.value);
+      if (ids.length === 0) {
+        alert("Nie wybrano żadnych wiadomości.");
+        return;
+      }
+      pendingDeleteAction = { type: 'trash', ids, folder: 'inbox' };
+      document.getElementById("confirmDeleteText").textContent = `Czy na pewno chcesz przenieść do kosza zaznaczone wiadomości (${ids.length} szt.)?`;
+      document.getElementById("confirmTrashBtn").style.display = "inline-flex";
+      document.getElementById("modalConfirmDelete").classList.remove("hidden");
+    };
+
+    window.toggleAllSent = (master) => {
+      document.querySelectorAll(".sent-checkbox").forEach(cb => cb.checked = master.checked);
+    };
+    window.selectAllSent = () => {
+      const master = document.getElementById("masterSentCheck");
+      master.checked = !master.checked;
+      toggleAllSent(master);
+    };
+    window.deleteSelectedSent = () => {
+      const ids = Array.from(document.querySelectorAll(".sent-checkbox:checked")).map(cb => cb.value);
+      if (ids.length === 0) {
+        alert("Nie wybrano żadnych wiadomości.");
+        return;
+      }
+      pendingDeleteAction = { type: 'trash', ids, folder: 'sent' };
+      document.getElementById("confirmDeleteText").textContent = `Czy na pewno chcesz przenieść do kosza zaznaczone wiadomości (${ids.length} szt.)?`;
+      document.getElementById("confirmTrashBtn").style.display = "inline-flex";
+      document.getElementById("modalConfirmDelete").classList.remove("hidden");
+    };
+
+    window.toggleAllTrash = (master) => {
+      document.querySelectorAll(".trash-checkbox").forEach(cb => cb.checked = master.checked);
+    };
+    window.selectAllTrash = () => {
+      const master = document.getElementById("masterTrashCheck");
+      master.checked = !master.checked;
+      toggleAllTrash(master);
+    };
+    window.restoreSelectedTrash = async () => {
+      const ids = Array.from(document.querySelectorAll(".trash-checkbox:checked")).map(cb => cb.value);
+      if (ids.length === 0) {
+        alert("Nie wybrano żadnych wiadomości w koszu.");
+        return;
+      }
+      for (const id of ids) {
+        const m = messagesList.find(x => x.id === id);
+        if (m) {
+          if (m.senderId === currentUser.id) {
+            await updateDoc(doc(db, "messages", id), { deletedBySender: false });
+          } else {
+            await updateDoc(doc(db, "messages", id), { deletedForRecipient: false });
+          }
+        }
+      }
+      await loadMessages();
+    };
+    window.permanentDeleteSelectedTrash = async () => {
+      const ids = Array.from(document.querySelectorAll(".trash-checkbox:checked")).map(cb => cb.value);
+      if (ids.length === 0) {
+        alert("Nie wybrano żadnych wiadomości w koszu.");
+        return;
+      }
+      if (confirm(`Czy na pewno trwale usunąć zaznaczone wiadomości z kosza (${ids.length} szt.)?`)) {
+        for (const id of ids) {
+          await deleteDoc(doc(db, "messages", id));
+        }
+        await loadMessages();
+      }
+    };
+
+    window.restoreMessage = async (id) => {
+      const m = messagesList.find(x => x.id === id);
+      if (m) {
+        if (m.senderId === currentUser.id) {
+          await updateDoc(doc(db, "messages", id), { deletedBySender: false });
+        } else {
+          await updateDoc(doc(db, "messages", id), { deletedForRecipient: false });
+        }
+      }
+      await loadMessages();
+    };
+
+    document.getElementById("formSendMessage").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const recipientType = document.getElementById("msgRecipientType").value;
+      const subject = document.getElementById("msgSubject").value.trim();
+      const body = document.getElementById("msgBody").value.trim();
+
+      let recipientId = "";
+      let recipientName = "";
+
+      if (recipientType === "user") {
+        recipientId = document.getElementById("msgTargetUser").value;
+        const targetUsr = usersList.find(u => u.id === recipientId);
+        recipientName = targetUsr ? targetUsr.name : "Użytkownik";
+      } else {
+        recipientName = document.getElementById("msgTargetDept").value;
+        recipientId = "dept_" + recipientName;
+      }
+
+      await addDoc(collection(db, "messages"), {
+        senderId: currentUser.id,
+        senderName: currentUser.name,
+        recipientType,
+        recipientId,
+        recipientName,
+        subject,
+        body,
+        deletedBySender: false,
+        deletedForRecipient: false,
+        createdAt: new Date()
+      });
+
+      document.getElementById("formSendMessage").reset();
+      closeModal("modalSendMessage");
+      await loadMessages();
+      alert("Wiadomość została wysłana pomyślnie!");
+    });
+
+    // WNIOSKI URLOPOWE & KALENDARZ
+    async function loadLeaveRequests() {
+      const snapshot = await getDocs(collection(db, "leave_requests"));
+      leaveRequestsList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      const tbody = document.getElementById("leaveRequestsTableBody");
+      tbody.innerHTML = "";
+
+      const filteredRequests = currentUser.role === 'Administrator' 
+        ? leaveRequestsList 
+        : leaveRequestsList.filter(r => r.userId === currentUser.id);
+
+      if (filteredRequests.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5">Brak wniosków urlopowych.</td></tr>`;
+        return;
+      }
+
+      filteredRequests.forEach(req => {
+        let badgeClass = "badge-pending";
+        if (req.status === "Zaakceptowany") badgeClass = "badge-accepted";
+        if (req.status === "Odrzucony") badgeClass = "badge-rejected";
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${req.userName}</strong></td>
+          <td>${req.type}</td>
+          <td>${req.startDate} do ${req.endDate}</td>
+          <td><span class="badge ${badgeClass}">${req.status}</span></td>
+          <td>
+            ${currentUser.role === 'Administrator' && req.status === 'Oczekujący' ? `
+              <button class="btn-ms btn-success" style="height: 24px; font-size: 11px; padding: 0 8px;" onclick="updateLeaveStatus('${req.id}', 'Zaakceptowany')">Akceptuj</button>
+              <button class="btn-ms btn-danger-soft" style="height: 24px; font-size: 11px; padding: 0 8px;" onclick="updateLeaveStatus('${req.id}', 'Odrzuć')">Odrzuć</button>
+            ` : (currentUser.role === 'Administrator' ? `<button class="btn-ms btn-secondary" onclick="deleteLeaveRequest('${req.id}')">Usuń</button>` : '-')}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    document.getElementById("formLeaveRequest").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const type = document.getElementById("leaveType").value;
+      const startDate = document.getElementById("leaveStartDate").value;
+      const endDate = document.getElementById("leaveEndDate").value;
+
+      await addDoc(collection(db, "leave_requests"), {
+        userId: currentUser.id,
+        userName: currentUser.name,
+        type,
+        startDate,
+        endDate,
+        status: "Oczekujący",
+        createdAt: new Date()
+      });
+
+      document.getElementById("formLeaveRequest").reset();
+      closeModal("modalLeaveRequest");
+      await loadLeaveRequests();
+      alert("Wniosek urlopowy został złożony i czeka na akceptację administratora.");
+    });
+
+    window.updateLeaveStatus = async (reqId, newStatus) => {
+      const req = leaveRequestsList.find(r => r.id === reqId);
+      if (!req) return;
+
+      await updateDoc(doc(db, "leave_requests", reqId), { status: newStatus });
+
+      if (newStatus === "Zaakceptowany") {
+        await addDoc(collection(db, "calendar"), {
+          type: req.type.includes("L4") ? "L4" : "Urlop",
+          userId: req.userId,
+          startDate: req.startDate,
+          endDate: req.endDate,
+          createdAt: new Date()
+        });
+      }
+
+      await loadLeaveRequests();
+      await loadCalendarEvents();
+    };
+
+    window.deleteLeaveRequest = async (id) => {
+      if (confirm("Usunąć ten wniosek?")) {
+        await deleteDoc(doc(db, "leave_requests", id));
+        await loadLeaveRequests();
+      }
+    };
+
+    async function loadCalendarEvents() {
+      const snapshot = await getDocs(collection(db, "calendar"));
+      calendarEvents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      const tbody = document.getElementById("calendarEventsTableBody");
+      tbody.innerHTML = "";
+
+      const filteredEvents = currentUser.role === 'Administrator'
+        ? calendarEvents
+        : calendarEvents.filter(evt => evt.userId === currentUser.id || evt.type === "Święto");
+
+      filteredEvents.forEach(evt => {
+        let name = "Wszyscy (Święto)";
+        if (evt.userId) {
+          const u = usersList.find(x => x.id === evt.userId);
+          if (u) name = u.name;
+        }
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${name}</strong></td>
+          <td><span class="badge ${evt.type === 'Urlop' ? 'badge-urlop' : (evt.type === 'L4' ? 'badge-l4' : 'badge-swieto')}">${evt.type}</span></td>
+          <td>${evt.startDate} do ${evt.endDate}</td>
+          <td>
+            ${currentUser.role === 'Administrator' ? `<button class="btn-ms btn-secondary" onclick="deleteCalEvent('${evt.id}')">Usuń</button>` : '-'}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      renderCurrentEmployeeStatus();
+    }
+
+    function renderCurrentEmployeeStatus() {
+      const today = new Date().toISOString().split('T')[0];
+      const tbody = document.getElementById("employeeStatusTableBody");
+      tbody.innerHTML = "";
+
+      const targetUsers = currentUser.role === 'Administrator'
+        ? usersList
+        : usersList.filter(u => u.id === currentUser.id);
+
+      targetUsers.forEach(usr => {
+        const activeEvt = calendarEvents.find(evt => (evt.userId === usr.id || evt.type === "Święto") && (today >= evt.startDate && today <= evt.endDate));
+
+        let statusBadge = `<span class="badge badge-normal">Pracuje normalnie</span>`;
+        if (activeEvt) {
+          if (activeEvt.type.includes("Urlop")) statusBadge = `<span class="badge badge-urlop">Urlop</span>`;
+          if (activeEvt.type.includes("L4")) statusBadge = `<span class="badge badge-l4">L4 (Zwolnienie)</span>`;
+          if (activeEvt.type === "Święto") statusBadge = `<span class="badge badge-swieto">Dzień wolny (Święto)</span>`;
+        }
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${usr.name}</strong></td>
+          <td>${usr.department || 'Brak'}</td>
+          <td>${statusBadge}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    window.deleteCalEvent = async (id) => {
+      if (confirm("Usuń wpis z kalendarza?")) {
+        await deleteDoc(doc(db, "calendar", id));
+        await loadCalendarEvents();
+      }
+    };
+
+    // KSIĘGOWOŚĆ I PŁACE
+    function renderPayroll() {
+      const tbody = document.getElementById("payrollTableBody");
+      tbody.innerHTML = "";
+
+      const targetUsers = currentUser && currentUser.role === 'Pracownik' 
+        ? usersList.filter(u => u.id === currentUser.id) 
+        : usersList;
+
+      if (targetUsers.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6">Brak danych o wynagrodzeniach.</td></tr>`;
+        return;
+      }
+
+      targetUsers.forEach(usr => {
+        const userSchedules = scheduleList.filter(s => s.userId === usr.id);
+        const totalHours = userSchedules.reduce((acc, curr) => acc + (curr.hours || 0), 0);
+
+        let l4Days = 0;
+        let urlopDays = 0;
+        calendarEvents.forEach(evt => {
+          if (evt.userId === usr.id) {
+            const start = new Date(evt.startDate);
+            const end = new Date(evt.endDate);
+            const days = Math.ceil(Math.abs(end - start) / (1000 * 60 * 60 * 24)) + 1;
+            if (evt.type.includes("L4")) l4Days += days;
+            if (evt.type.includes("Urlop")) urlopDays += days;
+          }
+        });
+
+        const hourlyRate = usr.hourlyRate || 35;
+        const totalPayout = (totalHours * hourlyRate).toFixed(2);
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${usr.name}</strong></td>
+          <td>${usr.department || 'Brak'}</td>
+          <td>${hourlyRate} PLN/h (${usr.salaryTier || 'Średnia krajowa'})</td>
+          <td><strong>${totalHours} h</strong></td>
+          <td>L4: ${l4Days} d. | Urlop: ${urlopDays} d.</td>
+          <td><strong style="color: #107c41; font-size: 14px;">${totalPayout} PLN</strong></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function loadAllData() {
+      await Promise.all([loadDepartments(), loadUsers(), loadCalendarEvents(), loadSchedules(), loadLeaveRequests(), loadMessages()]);
+      renderPayroll();
+    }
+  </script>
+</body>
+</html>
