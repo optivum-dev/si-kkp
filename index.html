@@ -76,7 +76,7 @@
       position: absolute;
       top: 48px;
       left: 10px;
-      width: 300px;
+      width: 320px;
       background: #ffffff;
       box-shadow: 0 8px 24px rgba(0,0,0,0.18);
       border: 1px solid #e1dfdd;
@@ -263,6 +263,46 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+    }
+
+    /* --- DASHBOARD SPECIFIC STYLES --- */
+    .dash-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .dash-card {
+      background: #ffffff;
+      border: 1px solid #e1dfdd;
+      border-radius: 4px;
+      padding: 16px 20px;
+      box-shadow: 0 1.6px 3.6px 0 rgba(0,0,0,.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .dash-card-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #605e5c;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .dash-card-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #201f1e;
+      margin-top: 8px;
+    }
+
+    .dash-card-desc {
+      font-size: 12px;
+      color: #8a8886;
+      margin-top: 6px;
     }
 
     /* --- CALENDAR STYLES (SCHEDULE TAB) --- */
@@ -670,6 +710,10 @@
 
     <!-- 9-DOTS WAFFLE DROPDOWN MENU -->
     <div class="waffle-menu hidden" id="waffleMenu">
+      <div class="waffle-item admin-only-tab" data-tab="tab-dashboard">
+        <svg viewBox="0 0 20 20"><path d="M3 3h6v6H3V3zm8 0h6v6h-6V3zm-8 8h6v6H3v-6zm8 0h6v6h-6v-6z"/></svg>
+        Dashboard
+      </div>
       <div class="waffle-item admin-only-tab" data-tab="tab-users">
         <svg viewBox="0 0 20 20"><path d="M10 2a4 4 0 100 8 4 4 0 000-8zM3 16a5 5 0 0110 0H3z"/></svg>
         Pracownicy
@@ -694,6 +738,10 @@
         <svg viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm2 3h8v2H6V7zm0 4h5v2H6v-2z"/></svg>
         Wynagrodzenia
       </div>
+      <div class="waffle-item" data-tab="tab-zus">
+        <svg viewBox="0 0 20 20"><path d="M4 3a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V4a1 1 0 00-1-1H4zm3 3h6v2H7V6zm0 4h6v2H7v-2zm0 4h4v2H7v-2z"/></svg>
+        ZUS (Składki)
+      </div>
     </div>
 
     <!-- USER PROFILE & DROPDOWN -->
@@ -712,6 +760,10 @@
     <!-- LEFT SIDEBAR -->
     <aside class="ms-sidebar" id="mainSidebar">
       <ul class="nav-list">
+        <li class="nav-item admin-only-tab active" data-tab="tab-dashboard">
+          <svg viewBox="0 0 20 20"><path d="M3 3h6v6H3V3zm8 0h6v6h-6V3zm-8 8h6v6H3v-6zm8 0h6v6h-6v-6z"/></svg>
+          Dashboard
+        </li>
         <li class="nav-item admin-only-tab" data-tab="tab-users">
           <svg viewBox="0 0 20 20"><path d="M10 2a4 4 0 100 8 4 4 0 000-8zM3 16a5 5 0 0110 0H3z"/></svg>
           Pracownicy
@@ -720,7 +772,7 @@
           <svg viewBox="0 0 20 20"><path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm0 2h12v3H4V5zm0 5h5v5H4v-5zm7 0h5v5h-5v-5z"/></svg>
           Grupy (Oddziały)
         </li>
-        <li class="nav-item active" data-tab="tab-schedule">
+        <li class="nav-item" data-tab="tab-schedule">
           <svg viewBox="0 0 20 20"><path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5h8v2H6V7z"/></svg>
           Grafik Pracy
         </li>
@@ -736,6 +788,10 @@
           <svg viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm2 3h8v2H6V7zm0 4h5v2H6v-2z"/></svg>
           Księgowość & Płace
         </li>
+        <li class="nav-item" data-tab="tab-zus">
+          <svg viewBox="0 0 20 20"><path d="M4 3a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V4a1 1 0 00-1-1H4zm3 3h6v2H7V6zm0 4h6v2H7v-2zm0 4h4v2H7v-2z"/></svg>
+          ZUS (Składki)
+        </li>
       </ul>
       <div style="padding: 16px; font-size: 11px; color: #a19f9d; text-align: center;">
         Microsoft Theme &bull; 2026
@@ -744,6 +800,77 @@
 
     <!-- MAIN CONTENT AREA -->
     <main class="ms-content">
+
+      <!-- TAB 0: DASHBOARD (Pulpit Nawigacyjny dla Admina) -->
+      <section id="tab-dashboard" class="tab-content">
+        <div class="page-title">
+          <span>Pulpit Nawigacyjny (Dashboard)</span>
+          <span style="font-size: 13px; font-weight: normal; color: #605e5c;" id="dashTodayDate"></span>
+        </div>
+
+        <!-- KPI Cards Grid -->
+        <div class="dash-grid">
+          <div class="dash-card">
+            <div class="dash-card-title">Liczba Pracowników</div>
+            <div class="dash-card-value" id="dashTotalEmployees">0</div>
+            <div class="dash-card-desc" id="dashEmployeesSub">Wszyscy użytkownicy</div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-title">Liczba Oddziałów</div>
+            <div class="dash-card-value" id="dashTotalDepts">0</div>
+            <div class="dash-card-desc">Aktywne jednostki firmowe</div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-title">Budżet Płac (Miesiąc)</div>
+            <div class="dash-card-value" style="color: #107c41;" id="dashTotalPayroll">0.00 PLN</div>
+            <div class="dash-card-desc">Na podstawie grafiku</div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-title">Składki ZUS (Suma)</div>
+            <div class="dash-card-value" style="color: #0078d4;" id="dashTotalZus">0.00 PLN</div>
+            <div class="dash-card-desc">Pracownik + Pracodawca</div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+          <!-- Left Main Card: Stan obecności -->
+          <div class="ms-card" style="margin-bottom: 0;">
+            <div class="ms-card-header">📊 Dzisiejsza obecność i dostępność kadry</div>
+            <table class="ms-table">
+              <thead>
+                <tr>
+                  <th>Pracownik</th>
+                  <th>Oddział</th>
+                  <th>Rola</th>
+                  <th>Status dzisiaj</th>
+                </tr>
+              </thead>
+              <tbody id="dashPresenceTableBody">
+                <tr><td colspan="4">Ładowanie statusów...</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Right Side: Skróty i Oczekujące wnioski -->
+          <div style="display: flex; flex-direction: column; gap: 20px;">
+            <div class="ms-card" style="margin-bottom: 0;">
+              <div class="ms-card-header">⏳ Oczekujące Wnioski</div>
+              <div id="dashPendingLeavesCount" style="font-size: 24px; font-weight: 700; color: #a80000; margin-bottom: 8px;">0</div>
+              <p style="font-size: 13px; color: #605e5c; margin-bottom: 12px;">Wnioski urlopowe lub L4 wymagające decyzji.</p>
+              <button class="btn-ms btn-secondary" style="width: 100%;" onclick="switchToTab('tab-calendar')">Przejdź do urlopów &rarr;</button>
+            </div>
+
+            <div class="ms-card" style="margin-bottom: 0;">
+              <div class="ms-card-header">⚡ Szybkie Akcje</div>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button class="btn-ms btn-primary" onclick="document.getElementById('openAddUserModalBtn').click()">+ Dodaj pracownika</button>
+                <button class="btn-ms btn-secondary" onclick="switchToTab('tab-schedule')">📅 Otwórz grafik pracy</button>
+                <button class="btn-ms btn-secondary" onclick="switchToTab('tab-payroll')">💵 Rozlicz wynagrodzenia</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <!-- TAB 1: PRACOWNICY (Tylko Admin) -->
       <section id="tab-users" class="tab-content hidden">
@@ -799,7 +926,7 @@
       </section>
 
       <!-- TAB 3: GRAFIK PRACY -->
-      <section id="tab-schedule" class="tab-content">
+      <section id="tab-schedule" class="tab-content hidden">
         <div class="page-title">
           <span>Grafik Pracy (Miesięczny Kalendarz)</span>
           <button class="btn-ms btn-primary admin-only" id="openGenerateScheduleModalBtn">+ Generuj grafik</button>
@@ -1014,6 +1141,56 @@
             </thead>
             <tbody id="payrollTableBody">
               <tr><td colspan="6">Ładowanie płac...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 7: ZUS (SKŁADKI) -->
+      <section id="tab-zus" class="tab-content hidden">
+        <div class="page-title">
+          <span>Składki ZUS i Ubezpieczenia Społeczne</span>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <select id="zusPeriodFilter" class="form-control" style="width: 200px;" onchange="renderZusTab()">
+              <option value="current_month" selected>Bieżący miesiąc</option>
+              <option value="prev_month">Poprzedni miesiąc</option>
+              <option value="all">Wszystkie wpisy</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px;">
+          <div class="ms-card" style="margin-bottom: 0; padding: 16px;">
+            <div style="font-size: 12px; color: #605e5c; font-weight: 600; text-transform: uppercase;">Suma składek Pracownika</div>
+            <div style="font-size: 22px; font-weight: 600; color: #0078d4; margin-top: 4px;" id="kpiZusEmployee">0.00 PLN</div>
+          </div>
+          <div class="ms-card" style="margin-bottom: 0; padding: 16px;">
+            <div style="font-size: 12px; color: #605e5c; font-weight: 600; text-transform: uppercase;">Suma składek Pracodawcy</div>
+            <div style="font-size: 22px; font-weight: 600; color: #d13438; margin-top: 4px;" id="kpiZusEmployer">0.00 PLN</div>
+          </div>
+          <div class="ms-card" style="margin-bottom: 0; padding: 16px;">
+            <div style="font-size: 12px; color: #605e5c; font-weight: 600; text-transform: uppercase;">Łączne zobowiązanie ZUS</div>
+            <div style="font-size: 22px; font-weight: 600; color: #107c41; margin-top: 4px;" id="kpiZusTotal">0.00 PLN</div>
+          </div>
+        </div>
+
+        <div class="ms-card">
+          <div class="ms-card-header">Ewidencja składek ZUS pracowników (Umowa o pracę)</div>
+          <table class="ms-table">
+            <thead>
+              <tr>
+                <th>Pracownik</th>
+                <th>Przychód brutto</th>
+                <th>Emerytalna (19.52%)</th>
+                <th>Rentowa (8.00%)</th>
+                <th>Chorobowa (2.45%)</th>
+                <th>Zdrowotna (9.00%)</th>
+                <th>Suma ZUS Pracownik</th>
+                <th>Suma ZUS Pracodawca</th>
+              </tr>
+            </thead>
+            <tbody id="zusTableBody">
+              <tr><td colspan="8">Ładowanie danych ZUS...</td></tr>
             </tbody>
           </table>
         </div>
@@ -1479,6 +1656,23 @@
       return `<div class="user-avatar" style="background-color: ${color}; width: ${size}px; height: ${size}px; font-size: ${fontSize}px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; flex-shrink: 0;">${initials}</div>`;
     }
 
+    window.switchToTab = (tabId) => {
+      document.querySelectorAll(".nav-item").forEach(i => {
+        if(i.getAttribute("data-tab") === tabId) i.classList.add("active");
+        else i.classList.remove("active");
+      });
+
+      document.querySelectorAll(".tab-content").forEach(tab => tab.classList.add("hidden"));
+      const target = document.getElementById(tabId);
+      if (target) target.classList.remove("hidden");
+
+      if (tabId === "tab-dashboard") renderDashboard();
+      else if (tabId === "tab-schedule") renderScheduleCalendar();
+      else if (tabId === "tab-messages") loadMessages();
+      else if (tabId === "tab-payroll") renderPayroll();
+      else if (tabId === "tab-zus") renderZusTab();
+    };
+
     window.addEventListener("DOMContentLoaded", async () => {
       setupWaffleAndNav();
       setupProfileDropdown();
@@ -1501,23 +1695,8 @@
       allNavItems.forEach(item => {
         item.addEventListener("click", () => {
           const targetTab = item.getAttribute("data-tab");
-
-          document.querySelectorAll(".nav-item").forEach(i => {
-            if(i.getAttribute("data-tab") === targetTab) i.classList.add("active");
-            else i.classList.remove("active");
-          });
-
-          document.querySelectorAll(".tab-content").forEach(tab => tab.classList.add("hidden"));
-          document.getElementById(targetTab).classList.remove("hidden");
-
+          switchToTab(targetTab);
           waffleMenu.classList.add("hidden");
-          if (targetTab === "tab-schedule") {
-            renderScheduleCalendar();
-          } else if (targetTab === "tab-messages") {
-            loadMessages();
-          } else if (targetTab === "tab-payroll") {
-            renderPayroll();
-          }
         });
       });
     }
@@ -1724,17 +1903,9 @@
       });
 
       if (currentUser.role === "Pracownik") {
-        document.querySelectorAll(".nav-item").forEach(i => i.classList.remove("active"));
-        document.querySelector('.nav-item[data-tab="tab-schedule"]').classList.add("active");
-
-        document.querySelectorAll(".tab-content").forEach(tab => tab.classList.add("hidden"));
-        document.getElementById("tab-schedule").classList.remove("hidden");
+        switchToTab("tab-schedule");
       } else {
-        document.querySelectorAll(".nav-item").forEach(i => i.classList.remove("active"));
-        document.querySelector('.nav-item[data-tab="tab-users"]').classList.add("active");
-
-        document.querySelectorAll(".tab-content").forEach(tab => tab.classList.add("hidden"));
-        document.getElementById("tab-users").classList.remove("hidden");
+        switchToTab("tab-dashboard");
       }
 
       loadAllData();
@@ -1747,6 +1918,93 @@
       document.getElementById("currentUserAvatar").style.backgroundColor = "#004578";
       document.getElementById("formLogin").reset();
       document.getElementById("modalLogin").classList.remove("hidden");
+    }
+
+    // DASHBOARD (PULPIT NAWIGACYJNY)
+    function renderDashboard() {
+      const todayStr = new Date().toLocaleDateString('pl-PL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      document.getElementById("dashTodayDate").textContent = todayStr;
+
+      // 1. Statystyki ogólne
+      document.getElementById("dashTotalEmployees").textContent = usersList.length;
+      document.getElementById("dashTotalDepts").textContent = groupsList.length;
+
+      const totalAdmins = usersList.filter(u => u.role === "Administrator").length;
+      document.getElementById("dashEmployeesSub").textContent = `Pracownicy: ${usersList.length - totalAdmins} | Admini: ${totalAdmins}`;
+
+      // 2. Szacowany budżet płac (bieżący miesiąc)
+      const now = new Date();
+      const curY = now.getFullYear();
+      const curM = now.getMonth();
+
+      let currentMonthPayroll = 0;
+      let totalZusSum = 0;
+
+      usersList.forEach(usr => {
+        const userSchedules = scheduleList.filter(s => {
+          if (s.userId !== usr.id) return false;
+          const d = new Date(s.date);
+          return d.getFullYear() === curY && d.getMonth() === curM;
+        });
+
+        const totalHours = userSchedules.reduce((acc, curr) => acc + (curr.hours || 0), 0);
+        const grossSalary = totalHours * (usr.hourlyRate || 35);
+        currentMonthPayroll += grossSalary;
+
+        // Składki ZUS
+        const emet = grossSalary * (0.0976 * 2);
+        const rent = grossSalary * (0.0150 + 0.0650);
+        const chor = grossSalary * 0.0245;
+        const zdrow = (grossSalary - (grossSalary * (0.0976 + 0.0150 + 0.0245))) * 0.09;
+        const wypad = grossSalary * (0.0167 + 0.0245 + 0.0010);
+
+        totalZusSum += (emet + rent + chor + zdrow + wypad);
+      });
+
+      document.getElementById("dashTotalPayroll").textContent = currentMonthPayroll.toFixed(2) + " PLN";
+      document.getElementById("dashTotalZus").textContent = totalZusSum.toFixed(2) + " PLN";
+
+      // 3. Oczekujące wnioski urlopowe
+      const pendingLeaves = leaveRequestsList.filter(r => r.status === "Oczekujący").length;
+      document.getElementById("dashPendingLeavesCount").textContent = pendingLeaves;
+
+      // 4. Stan obecności zespołu na dziś
+      const todayISO = new Date().toISOString().split('T')[0];
+      const tbody = document.getElementById("dashPresenceTableBody");
+      tbody.innerHTML = "";
+
+      if (usersList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4">Brak dodanych pracowników.</td></tr>`;
+        return;
+      }
+
+      usersList.forEach(usr => {
+        const activeEvt = calendarEvents.find(evt => (evt.userId === usr.id) && (todayISO >= evt.startDate && todayISO <= evt.endDate));
+        const activeHoliday = publicHolidaysList.find(h => todayISO >= h.startDate && todayISO <= h.endDate);
+
+        let statusBadge = `<span class="badge badge-normal">Pracuje normalnie</span>`;
+        if (activeHoliday) {
+          statusBadge = `<span class="badge badge-swieto">Dzień wolny (${activeHoliday.name})</span>`;
+        } else if (activeEvt) {
+          if (activeEvt.type.includes("Urlop")) statusBadge = `<span class="badge badge-urlop">Urlop</span>`;
+          if (activeEvt.type.includes("L4")) statusBadge = `<span class="badge badge-l4">L4 (Zwolnienie)</span>`;
+        }
+
+        const avatarHtml = generateAvatarHtml(usr.name, usr.id, 24, 10);
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              ${avatarHtml}
+              <strong>${usr.name}</strong>
+            </div>
+          </td>
+          <td>${usr.department || 'Brak'}</td>
+          <td><span class="badge ${usr.role === 'Administrator' ? 'badge-l4' : 'badge-normal'}">${usr.role}</span></td>
+          <td>${statusBadge}</td>
+        `;
+        tbody.appendChild(tr);
+      });
     }
 
     // ODDZIAŁY
@@ -1791,6 +2049,7 @@
       document.getElementById("addGroupProtectDeletion").checked = true;
       closeModal("modalAddGroup");
       await loadDepartments();
+      renderDashboard();
       alert("Oddział został pomyślnie dodany!");
     });
 
@@ -1831,6 +2090,7 @@
       });
       document.getElementById("modalEditGroup").classList.add("hidden");
       await loadDepartments();
+      renderDashboard();
     });
 
     window.deleteDept = async (id) => {
@@ -1842,6 +2102,7 @@
       if (confirm("Czy na pewno usunąć ten oddział?")) {
         await deleteDoc(doc(db, "departments", id));
         await loadDepartments();
+        renderDashboard();
       }
     };
 
@@ -1905,7 +2166,9 @@
       document.getElementById("addProtectDeletion").checked = true;
       closeModal("modalAddUser");
       await loadUsers();
+      renderDashboard();
       renderPayroll();
+      renderZusTab();
       alert("Konto pracownika zostało utworzone pomyślnie!");
     });
 
@@ -1968,7 +2231,7 @@
             <div class="profile-stat-value">💰 ${u.hourlyRate || 35} PLN/h</div>
           </div>
           <div class="profile-stat-box">
-            <div class="profile-stat-label">Telefon / Zatrundienie</div>
+            <div class="profile-stat-label">Telefon / Zatrudnienie</div>
             <div class="profile-stat-value" style="font-size: 12px; line-height: 1.4; margin-top: 2px;">📞 ${u.phone || '-'}<br>📅 Od: ${u.hireDate || '-'}</div>
           </div>
           <div class="profile-stat-box">
@@ -2128,7 +2391,9 @@
       await updateDoc(doc(db, "users", id), updatedData);
       document.getElementById("modalEditUser").classList.add("hidden");
       await loadUsers();
+      renderDashboard();
       renderPayroll();
+      renderZusTab();
     });
 
     window.deleteUser = async (id) => {
@@ -2140,7 +2405,9 @@
       if (confirm("Czy na pewno usunąć to konto pracownika?")) {
         await deleteDoc(doc(db, "users", id));
         await loadUsers();
+        renderDashboard();
         renderPayroll();
+        renderZusTab();
       }
     };
 
@@ -2186,6 +2453,7 @@
       document.getElementById("formAddPublicHoliday").reset();
       await loadPublicHolidays();
       renderScheduleCalendar();
+      renderDashboard();
       alert("Dzień wolny został dodany do systemu i oznaczony w grafiku!");
     });
 
@@ -2194,6 +2462,7 @@
         await deleteDoc(doc(db, "public_holidays", id));
         await loadPublicHolidays();
         renderScheduleCalendar();
+        renderDashboard();
       }
     };
 
@@ -2353,7 +2622,9 @@
       document.getElementById("formAddSchedule").reset();
       closeModal("modalGenerateSchedule");
       await loadSchedules();
+      renderDashboard();
       renderPayroll();
+      renderZusTab();
       alert("Grafik został wygenerowany i zaktualizowany w kalendarzu!");
     });
 
@@ -2361,14 +2632,18 @@
       if (confirm("Usuń ten wpis z grafiku?")) {
         await deleteDoc(doc(db, "schedules", id));
         await loadSchedules();
+        renderDashboard();
         renderPayroll();
+        renderZusTab();
       }
     };
 
     window.deleteScheduleFromEdit = async (schedId, userId) => {
       await deleteDoc(doc(db, "schedules", schedId));
       await loadSchedules();
+      renderDashboard();
       renderPayroll();
+      renderZusTab();
       openEditUser(userId);
     };
 
@@ -2736,6 +3011,7 @@
       document.getElementById("formLeaveRequest").reset();
       closeModal("modalLeaveRequest");
       await loadLeaveRequests();
+      renderDashboard();
       alert("Wniosek urlopowy został złożony i czeka na akceptację administratora.");
     });
 
@@ -2758,12 +3034,14 @@
       await loadLeaveRequests();
       await loadCalendarEvents();
       renderScheduleCalendar();
+      renderDashboard();
     };
 
     window.deleteLeaveRequest = async (id) => {
       if (confirm("Usunąć ten wniosek?")) {
         await deleteDoc(doc(db, "leave_requests", id));
         await loadLeaveRequests();
+        renderDashboard();
       }
     };
 
@@ -2871,9 +3149,100 @@
       document.getElementById("kpiTotalEmployees").textContent = targetUsers.length;
     }
 
+    // TAB 7: ZUS (SKŁADKI) LOGIC
+    window.renderZusTab = () => {
+      const tbody = document.getElementById("zusTableBody");
+      tbody.innerHTML = "";
+
+      const period = document.getElementById("zusPeriodFilter").value;
+      const now = new Date();
+
+      const targetUsers = currentUser && currentUser.role === 'Pracownik' 
+        ? usersList.filter(u => u.id === currentUser.id) 
+        : usersList;
+
+      if (targetUsers.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8">Brak danych pracowników do naliczenia ZUS.</td></tr>`;
+        return;
+      }
+
+      let totalEmployeeZusSum = 0;
+      let totalEmployerZusSum = 0;
+
+      targetUsers.forEach(usr => {
+        let userSchedules = scheduleList.filter(s => s.userId === usr.id);
+
+        if (period === "current_month") {
+          const curY = now.getFullYear();
+          const curM = now.getMonth();
+          userSchedules = userSchedules.filter(s => {
+            const d = new Date(s.date);
+            return d.getFullYear() === curY && d.getMonth() === curM;
+          });
+        } else if (period === "prev_month") {
+          const prevMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+          const prevY = prevMonthDate.getFullYear();
+          const prevM = prevMonthDate.getMonth();
+          userSchedules = userSchedules.filter(s => {
+            const d = new Date(s.date);
+            return d.getFullYear() === prevY && d.getMonth() === prevM;
+          });
+        }
+
+        const totalHours = userSchedules.reduce((acc, curr) => acc + (curr.hours || 0), 0);
+        const grossSalary = totalHours * (usr.hourlyRate || 35);
+
+        // STAWKI SKŁADEK ZUS
+        // Pracownik:
+        const emetPrac = grossSalary * 0.0976; // 9.76%
+        const rentPrac = grossSalary * 0.0150; // 1.50%
+        const chorPrac = grossSalary * 0.0245; // 2.45%
+        const zusSocialBasePrac = grossSalary - (emetPrac + rentPrac + chorPrac);
+        const zdrowPrac = zusSocialBasePrac * 0.09; // 9% zdrowotnej
+        const sumZusPrac = emetPrac + rentPrac + chorPrac + zdrowPrac;
+
+        // Pracodawca:
+        const emetPracod = grossSalary * 0.0976; // 9.76%
+        const rentPracod = grossSalary * 0.0650; // 6.50%
+        const wypadPracod = grossSalary * 0.0167; // 1.67%
+        const fpPracod = grossSalary * 0.0245;    // 2.45%
+        const fgspPracod = grossSalary * 0.0010;  // 0.10%
+        const sumZusPracod = emetPracod + rentPracod + wypadPracod + fpPracod + fgspPracod;
+
+        totalEmployeeZusSum += sumZusPrac;
+        totalEmployerZusSum += sumZusPracod;
+
+        const avatarHtml = generateAvatarHtml(usr.name, usr.id, 24, 10);
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              ${avatarHtml}
+              <strong>${usr.name}</strong>
+            </div>
+          </td>
+          <td><strong>${grossSalary.toFixed(2)} PLN</strong></td>
+          <td>${(emetPrac * 2).toFixed(2)} PLN</td>
+          <td>${(rentPrac + rentPracod).toFixed(2)} PLN</td>
+          <td>${chorPrac.toFixed(2)} PLN</td>
+          <td>${zdrowPrac.toFixed(2)} PLN</td>
+          <td><strong style="color: #0078d4;">${sumZusPrac.toFixed(2)} PLN</strong></td>
+          <td><strong style="color: #d13438;">${sumZusPracod.toFixed(2)} PLN</strong></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById("kpiZusEmployee").textContent = totalEmployeeZusSum.toFixed(2) + " PLN";
+      document.getElementById("kpiZusEmployer").textContent = totalEmployerZusSum.toFixed(2) + " PLN";
+      document.getElementById("kpiZusTotal").textContent = (totalEmployeeZusSum + totalEmployerZusSum).toFixed(2) + " PLN";
+    };
+
     async function loadAllData() {
       await Promise.all([loadDepartments(), loadUsers(), loadPublicHolidays(), loadCalendarEvents(), loadSchedules(), loadLeaveRequests(), loadMessages()]);
+      renderDashboard();
       renderPayroll();
+      renderZusTab();
     }
   </script>
 </body>
