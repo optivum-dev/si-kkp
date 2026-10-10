@@ -136,7 +136,6 @@
       width: 32px;
       height: 32px;
       border-radius: 50%;
-      background-color: #004578;
       color: #ffffff;
       display: flex;
       align-items: center;
@@ -144,6 +143,7 @@
       font-weight: 600;
       font-size: 13px;
       border: 1px solid rgba(255, 255, 255, 0.4);
+      background-color: #004578;
     }
 
     .profile-dropdown {
@@ -328,6 +328,20 @@
       gap: 4px;
     }
 
+    .shift-badge.leave-badge {
+      background-color: #f3f2f1 !important;
+      color: #a19f9d !important;
+      border-color: #e1dfdd !important;
+      text-decoration: line-through;
+    }
+
+    .shift-badge.holiday-badge {
+      background-color: #fde7e9 !important;
+      color: #a80000 !important;
+      border-color: #f8a5a8 !important;
+      font-weight: 600;
+    }
+
     .shift-badge button {
       background: transparent;
       border: none;
@@ -346,19 +360,6 @@
       padding-bottom: 16px;
       border-bottom: 1px solid #e1dfdd;
       margin-bottom: 16px;
-    }
-    .profile-large-avatar {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      background-color: #004578;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      font-size: 22px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
     .profile-info-title {
       font-size: 20px;
@@ -446,6 +447,23 @@
       height: auto;
       min-height: 80px;
       padding: 8px 10px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #323130;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
     }
 
     /* --- BUTTONS --- */
@@ -739,11 +757,11 @@
           <table class="ms-table">
             <thead>
               <tr>
-                <th>Imię i Nazwisko</th>
+                <th>Pracownik</th>
+                <th>Stanowisko</th>
                 <th>Login</th>
                 <th>Oddział</th>
                 <th>Rola</th>
-                <th>Próg Płacowy</th>
                 <th>Stawka/h</th>
                 <th style="width: 50px;">Opcje</th>
               </tr>
@@ -769,46 +787,22 @@
               <tr>
                 <th>Nazwa Oddziału</th>
                 <th>Opis / Lokalizacja</th>
+                <th>Ochrona przed usunięciem</th>
                 <th style="width: 50px;">Opcje</th>
               </tr>
             </thead>
             <tbody id="groupsTableBody">
-              <tr><td colspan="3">Ładowanie danych...</td></tr>
+              <tr><td colspan="4">Ładowanie danych...</td></tr>
             </tbody>
           </table>
         </div>
       </section>
 
-      <!-- TAB 3: GRAFIK PRACY (Pierwszy ekran pracownika) -->
+      <!-- TAB 3: GRAFIK PRACY -->
       <section id="tab-schedule" class="tab-content">
-        <h1 class="page-title">Grafik Pracy (Miesięczny Kalendarz)</h1>
-
-        <div class="ms-card admin-only">
-          <div class="ms-card-header">Generuj grafik na zakres dat (np. cały miesiąc)</div>
-          <form id="formAddSchedule">
-            <div class="form-grid">
-              <div class="form-group">
-                <label>Pracownik</label>
-                <select id="schedUserSelect" class="form-control" required></select>
-              </div>
-              <div class="form-group">
-                <label>Data od</label>
-                <input type="date" id="schedDateFrom" class="form-control" required>
-              </div>
-              <div class="form-group">
-                <label>Data do</label>
-                <input type="date" id="schedDateTo" class="form-control" required>
-              </div>
-              <div class="form-group">
-                <label>Godziny pracy (od - do)</label>
-                <div style="display: flex; gap: 6px;">
-                  <input type="time" id="schedTimeFrom" class="form-control" value="08:00" required>
-                  <input type="time" id="schedTimeTo" class="form-control" value="16:00" required>
-                </div>
-              </div>
-            </div>
-            <button type="submit" class="btn-ms btn-primary">Generuj grafik</button>
-          </form>
+        <div class="page-title">
+          <span>Grafik Pracy (Miesięczny Kalendarz)</span>
+          <button class="btn-ms btn-primary admin-only" id="openGenerateScheduleModalBtn">+ Generuj grafik</button>
         </div>
 
         <div class="ms-card">
@@ -821,60 +815,83 @@
         </div>
       </section>
 
-      <!-- TAB 4: KALENDARZ, URLOPY, L4 -->
+      <!-- TAB 4: KALENDARZ, URLOPY, L4 & DNI WOLNE -->
       <section id="tab-calendar" class="tab-content hidden">
         <div class="page-title">
-          <span>Kalendarz Pracy, Urlopów i L4</span>
+          <span>Kalendarz Pracy, Urlopów i Dni Wolnych</span>
           <button class="btn-ms btn-primary" id="openLeaveModalBtn">+ Nowy Wniosek Urlopowy</button>
         </div>
 
-        <div class="ms-card">
-          <div class="ms-card-header">Dostępność pracowników (Dzisiaj)</div>
-          <table class="ms-table">
-            <thead>
-              <tr>
-                <th>Pracownik</th>
-                <th>Oddział</th>
-                <th>Dzisiejszy status</th>
-              </tr>
-            </thead>
-            <tbody id="employeeStatusTableBody">
-              <tr><td colspan="3">Ładowanie statusów...</td></tr>
-            </tbody>
-          </table>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div class="ms-card" style="margin-bottom: 0;">
+            <div class="ms-card-header">📋 Dzisiejsza dostępność zespołu</div>
+            <table class="ms-table">
+              <thead>
+                <tr>
+                  <th>Pracownik</th>
+                  <th>Oddział</th>
+                  <th>Status dzisiaj</th>
+                </tr>
+              </thead>
+              <tbody id="employeeStatusTableBody">
+                <tr><td colspan="3">Ładowanie statusów...</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="ms-card" style="margin-bottom: 0;">
+            <div class="ms-card-header">⏳ Wnioski Urlopowe i L4</div>
+            <table class="ms-table">
+              <thead>
+                <tr>
+                  <th>Pracownik</th>
+                  <th>Typ</th>
+                  <th>Zakres dat</th>
+                  <th>Status</th>
+                  <th>Akcje</th>
+                </tr>
+              </thead>
+              <tbody id="leaveRequestsTableBody">
+                <tr><td colspan="5">Brak wniosków...</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        <div class="ms-card">
-          <div class="ms-card-header">Wnioski Urlopowe (Moje i Firmowe)</div>
+        <!-- SEKCJA: DNI WOLNE OD PRACY -->
+        <div class="ms-card admin-only" style="margin-top: 20px;">
+          <div class="ms-card-header">Dodaj oficjalny dzień wolny od pracy / święto w firmie</div>
+          <form id="formAddPublicHoliday">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Nazwa dnia wolnego / Święta</label>
+                <input type="text" id="holidayName" class="form-control" required placeholder="np. Nowy Rok / Dzień Wolny">
+              </div>
+              <div class="form-group">
+                <label>Data od</label>
+                <input type="date" id="holidayDateFrom" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label>Data do (zakres)</label>
+                <input type="date" id="holidayDateTo" class="form-control" required>
+              </div>
+            </div>
+            <button type="submit" class="btn-ms btn-primary">Dodaj dzień wolny do grafiku</button>
+          </form>
+        </div>
+
+        <div class="ms-card" style="margin-top: 20px;">
+          <div class="ms-card-header">📅 Zatwierdzone dni wolne od pracy i święta w systemie</div>
           <table class="ms-table">
             <thead>
               <tr>
-                <th>Pracownik</th>
-                <th>Typ wniosku</th>
+                <th>Nazwa / Święto</th>
                 <th>Zakres dat</th>
-                <th>Status</th>
                 <th>Akcje</th>
               </tr>
             </thead>
-            <tbody id="leaveRequestsTableBody">
-              <tr><td colspan="5">Brak wniosków...</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="ms-card">
-          <div class="ms-card-header">Zatwierdzone absencje i święta w kalendarzu</div>
-          <table class="ms-table">
-            <thead>
-              <tr>
-                <th>Pracownik / Dzień</th>
-                <th>Typ</th>
-                <th>Zakres dat</th>
-                <th>Akcje</th>
-              </tr>
-            </thead>
-            <tbody id="calendarEventsTableBody">
-              <tr><td colspan="4">Brak wpisów...</td></tr>
+            <tbody id="publicHolidaysTableBody">
+              <tr><td colspan="3">Brak dni wolnych...</td></tr>
             </tbody>
           </table>
         </div>
@@ -965,15 +982,32 @@
       <!-- TAB 6: KSIĘGOWOŚĆ I PŁACE -->
       <section id="tab-payroll" class="tab-content hidden">
         <h1 class="page-title">Księgowość i Wynagrodzenia</h1>
+
+        <!-- KPI Summary Cards -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px;">
+          <div class="ms-card" style="margin-bottom: 0; padding: 16px;">
+            <div style="font-size: 12px; color: #605e5c; font-weight: 600; text-transform: uppercase;">Łączny budżet płac</div>
+            <div style="font-size: 22px; font-weight: 600; color: #107c41; margin-top: 4px;" id="kpiTotalPayout">0.00 PLN</div>
+          </div>
+          <div class="ms-card" style="margin-bottom: 0; padding: 16px;">
+            <div style="font-size: 12px; color: #605e5c; font-weight: 600; text-transform: uppercase;">Suma przepracowanych godzin</div>
+            <div style="font-size: 22px; font-weight: 600; color: #0078d4; margin-top: 4px;" id="kpiTotalHours">0 h</div>
+          </div>
+          <div class="ms-card" style="margin-bottom: 0; padding: 16px;">
+            <div style="font-size: 12px; color: #605e5c; font-weight: 600; text-transform: uppercase;">Aktywni pracownicy w rozliczeniu</div>
+            <div style="font-size: 22px; font-weight: 600; color: #201f1e; margin-top: 4px;" id="kpiTotalEmployees">0</div>
+          </div>
+        </div>
+
         <div class="ms-card">
-          <div class="ms-card-header">Wyliczenie wynagrodzeń (Godziny z Grafiku * Stawka/h)</div>
+          <div class="ms-card-header">Szczegółowe wyliczenie wynagrodzeń (Godziny z Grafiku &times; Stawka/h)</div>
           <table class="ms-table">
             <thead>
               <tr>
                 <th>Pracownik</th>
                 <th>Oddział</th>
                 <th>Stawka za h</th>
-                <th>Przepracowane godz. (Grafik)</th>
+                <th>Przepracowane godz.</th>
                 <th>Dni L4 / Urlop</th>
                 <th>Szacowane Wynagrodzenie</th>
               </tr>
@@ -986,6 +1020,40 @@
       </section>
 
     </main>
+  </div>
+
+  <!-- MODAL: GENEROWANIE GRAFIKU -->
+  <div class="modal-overlay hidden" id="modalGenerateSchedule">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span>Generator Grafiku Pracy</span>
+        <button class="btn-ms btn-secondary" onclick="closeModal('modalGenerateSchedule')">X</button>
+      </div>
+      <form id="formAddSchedule">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Pracownik</label>
+            <select id="schedUserSelect" class="form-control" required></select>
+          </div>
+          <div class="form-group">
+            <label>Data od</label>
+            <input type="date" id="schedDateFrom" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Data do</label>
+            <input type="date" id="schedDateTo" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Godziny pracy (od - do)</label>
+            <div style="display: flex; gap: 6px;">
+              <input type="time" id="schedTimeFrom" class="form-control" value="08:00" required>
+              <input type="time" id="schedTimeTo" class="form-control" value="16:00" required>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn-ms btn-primary" style="width: 100%; margin-top: 10px;">Generuj grafik do kalendarza</button>
+      </form>
+    </div>
   </div>
 
   <!-- MODAL: INITIAL SETUP -->
@@ -1053,7 +1121,7 @@
 
   <!-- MODAL: DODAWANIE PRACOWNIKA -->
   <div class="modal-overlay hidden" id="modalAddUser">
-    <div class="modal-box">
+    <div class="modal-box" style="width: 620px;">
       <div class="modal-header">
         <span>Dodaj nowego pracownika</span>
         <button class="btn-ms btn-secondary" onclick="closeModal('modalAddUser')">X</button>
@@ -1063,6 +1131,18 @@
           <div class="form-group">
             <label>Imię i Nazwisko</label>
             <input type="text" id="addName" class="form-control" required placeholder="np. Anna Nowak">
+          </div>
+          <div class="form-group">
+            <label>Stanowisko</label>
+            <input type="text" id="addPosition" class="form-control" placeholder="np. Specjalista ds. Kadrowo-Płacowych">
+          </div>
+          <div class="form-group">
+            <label>Telefon kontaktowy</label>
+            <input type="text" id="addPhone" class="form-control" placeholder="+48 500 600 700">
+          </div>
+          <div class="form-group">
+            <label>Data zatrudnienia</label>
+            <input type="date" id="addHireDate" class="form-control">
           </div>
           <div class="form-group">
             <label>Login</label>
@@ -1096,7 +1176,12 @@
             <input type="number" step="0.5" id="addHourlyRate" class="form-control" placeholder="35.00" value="35">
           </div>
         </div>
-        <button type="submit" class="btn-ms btn-primary" style="width: 100%; margin-top: 10px;">Utwórz konto pracownika</button>
+        <div style="margin-top: 12px; margin-bottom: 16px;">
+          <label class="checkbox-group">
+            <input type="checkbox" id="addProtectDeletion" checked> Chroń przed przypadkowym usunięciem konta
+          </label>
+        </div>
+        <button type="submit" class="btn-ms btn-primary" style="width: 100%;">Utwórz konto pracownika</button>
       </form>
     </div>
   </div>
@@ -1113,9 +1198,14 @@
           <label>Nazwa oddziału / grupy</label>
           <input type="text" id="addGroupName" class="form-control" required placeholder="np. Oddział Kraków / IT">
         </div>
-        <div class="form-group" style="margin-bottom: 16px;">
+        <div class="form-group" style="margin-bottom: 12px;">
           <label>Lokalizacja / Opis</label>
           <input type="text" id="addGroupDesc" class="form-control" placeholder="np. Biuro Regionalne">
+        </div>
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label class="checkbox-group">
+            <input type="checkbox" id="addGroupProtectDeletion" checked> Chroń przed przypadkowym usunięciem oddziału
+          </label>
         </div>
         <button type="submit" class="btn-ms btn-primary" style="width: 100%;">Utwórz oddział</button>
       </form>
@@ -1207,7 +1297,7 @@
     </div>
   </div>
 
-  <!-- MODAL: POTWIERDZONY DIALOG USUWANIA (KOSZ / TRWAŁE) -->
+  <!-- MODAL: POTWIERDZONY DIALOG USUWANIA -->
   <div class="modal-overlay hidden" id="modalConfirmDelete">
     <div class="modal-box" style="width: 420px;">
       <div class="modal-header">Potwierdź usunięcie</div>
@@ -1222,9 +1312,9 @@
     </div>
   </div>
 
-  <!-- MODAL: PODGLĄD PRACOWNIKA (PROFIL) -->
+  <!-- MODAL: PODGLĄD PRACOWNIKA (PROFIL Z WYNAGRODZENIEM DLA DANEGO OKRESU) -->
   <div class="modal-overlay hidden" id="modalViewUser">
-    <div class="modal-box" style="width: 620px;">
+    <div class="modal-box" style="width: 640px;">
       <div class="modal-header">
         <span>Profil Użytkownika</span>
         <button class="btn-ms btn-secondary" onclick="closeModal('modalViewUser')">X</button>
@@ -1235,7 +1325,7 @@
 
   <!-- MODAL: EDYCJA PRACOWNIKA -->
   <div class="modal-overlay hidden" id="modalEditUser">
-    <div class="modal-box">
+    <div class="modal-box" style="width: 620px;">
       <div class="modal-header">
         <span>Edycja Pracownika i Grafiku</span>
         <button class="btn-ms btn-secondary" onclick="closeModal('modalEditUser')">X</button>
@@ -1246,6 +1336,18 @@
           <div class="form-group">
             <label>Imię i Nazwisko</label>
             <input type="text" id="editName" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Stanowisko</label>
+            <input type="text" id="editPosition" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Telefon kontaktowy</label>
+            <input type="text" id="editPhone" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Data zatrudnienia</label>
+            <input type="date" id="editHireDate" class="form-control">
           </div>
           <div class="form-group">
             <label>Login</label>
@@ -1279,6 +1381,11 @@
             <input type="number" step="0.5" id="editHourlyRate" class="form-control" required>
           </div>
         </div>
+        <div style="margin-top: 12px; margin-bottom: 16px;">
+          <label class="checkbox-group">
+            <input type="checkbox" id="editProtectDeletion"> Chroń przed przypadkowym usunięciem konta
+          </label>
+        </div>
         <div style="margin: 16px 0; border-top: 1px solid #e1dfdd; padding-top: 12px;">
           <label style="font-weight: 600; font-size: 13px; display: block; margin-bottom: 8px;">Harmonogram / Grafik pracownika:</label>
           <div id="editUserScheduleList" style="max-height: 140px; overflow-y: auto; font-size: 12px; background: #faf9f8; border: 1px solid #e1dfdd; padding: 8px; border-radius: 2px;">
@@ -1303,9 +1410,14 @@
           <label>Nazwa Oddziału</label>
           <input type="text" id="editGroupName" class="form-control" required>
         </div>
-        <div class="form-group" style="margin-bottom: 16px;">
+        <div class="form-group" style="margin-bottom: 12px;">
           <label>Opis / Lokalizacja</label>
           <input type="text" id="editGroupDesc" class="form-control">
+        </div>
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label class="checkbox-group">
+            <input type="checkbox" id="editGroupProtectDeletion"> Chroń przed przypadkowym usunięciem oddziału
+          </label>
         </div>
         <button type="submit" class="btn-ms btn-primary" style="width: 100%;">Zapisz zmiany</button>
       </form>
@@ -1339,9 +1451,33 @@
     let scheduleList = [];
     let leaveRequestsList = [];
     let messagesList = [];
+    let publicHolidaysList = [];
     let currentCalendarDate = new Date();
     let currentViewingMessage = null;
     let pendingDeleteAction = null;
+
+    // PALETA KOLORÓW DLA AWATARÓW (FLUENT DESIGN PALETTE)
+    const avatarColors = [
+      '#0078d4', '#107c41', '#5c2d91', '#b4009e', '#008272', 
+      '#d13438', '#004e8c', '#498205', '#881798', '#005a9e', 
+      '#e3008c', '#038387', '#c239b3', '#8e8cd8', '#00188f'
+    ];
+
+    function getAvatarColor(identifier) {
+      let hash = 0;
+      const str = identifier || "user";
+      for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      const index = Math.abs(hash) % avatarColors.length;
+      return avatarColors[index];
+    }
+
+    function generateAvatarHtml(name, identifier, size = 32, fontSize = 12) {
+      const initials = (name || "U").split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
+      const color = getAvatarColor(identifier || name);
+      return `<div class="user-avatar" style="background-color: ${color}; width: ${size}px; height: ${size}px; font-size: ${fontSize}px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; flex-shrink: 0;">${initials}</div>`;
+    }
 
     window.addEventListener("DOMContentLoaded", async () => {
       setupWaffleAndNav();
@@ -1379,6 +1515,8 @@
             renderScheduleCalendar();
           } else if (targetTab === "tab-messages") {
             loadMessages();
+          } else if (targetTab === "tab-payroll") {
+            renderPayroll();
           }
         });
       });
@@ -1426,6 +1564,10 @@
       document.getElementById("openSendMessageModalBtn").addEventListener("click", () => {
         populateMessageRecipients();
         document.getElementById("modalSendMessage").classList.remove("hidden");
+      });
+
+      document.getElementById("openGenerateScheduleModalBtn").addEventListener("click", () => {
+        document.getElementById("modalGenerateSchedule").classList.remove("hidden");
       });
     }
 
@@ -1508,11 +1650,12 @@
       await addDoc(collection(db, "users"), {
         name, login, password, role: "Administrator",
         department: "Zarząd / Biuro", salaryTier: "Najwyższa krajowa", hourlyRate: 80, 
-        isFirstLogin: false, createdAt: new Date()
+        position: "Administrator Systemu", phone: "+48 111 222 333", hireDate: "2026-01-01",
+        protectDeletion: true, isFirstLogin: false, createdAt: new Date()
       });
 
       await addDoc(collection(db, "departments"), {
-        name: "Zarząd / Biuro", description: "Główny oddział firmy"
+        name: "Zarząd / Biuro", description: "Główny oddział firmy", protectDeletion: true
       });
 
       document.getElementById("modalSetup").classList.add("hidden");
@@ -1566,7 +1709,9 @@
 
     function onLoginSuccess() {
       document.getElementById("currentUserNavName").textContent = currentUser.name;
-      document.getElementById("currentUserAvatar").textContent = currentUser.name.split(" ").map(n => n[0]).join("").toUpperCase();
+      const avatarEl = document.getElementById("currentUserAvatar");
+      avatarEl.innerHTML = (currentUser.name || "U").split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
+      avatarEl.style.backgroundColor = getAvatarColor(currentUser.id || currentUser.name);
 
       document.querySelectorAll(".admin-only").forEach(el => {
         if (currentUser.role === "Administrator") el.classList.remove("hidden");
@@ -1599,6 +1744,7 @@
       currentUser = null;
       document.getElementById("currentUserNavName").textContent = "Niezalogowany";
       document.getElementById("currentUserAvatar").textContent = "--";
+      document.getElementById("currentUserAvatar").style.backgroundColor = "#004578";
       document.getElementById("formLogin").reset();
       document.getElementById("modalLogin").classList.remove("hidden");
     }
@@ -1617,10 +1763,12 @@
       editDeptSel.innerHTML = "<option value='Brak'>-- Wybierz oddział --</option>";
 
       groupsList.forEach(grp => {
+        const isProtected = grp.protectDeletion !== false;
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td><strong>${grp.name}</strong></td>
           <td>${grp.description || '-'}</td>
+          <td>${isProtected ? '<span class="badge badge-normal">Chroniony 🔒</span>' : '<span class="badge badge-urlop">Niechroniony</span>'}</td>
           <td>
             <button class="dots-btn" onclick="toggleDeptMenu(event, '${grp.id}')">&#8942;</button>
           </td>
@@ -1636,8 +1784,11 @@
       e.preventDefault();
       const name = document.getElementById("addGroupName").value.trim();
       const description = document.getElementById("addGroupDesc").value.trim();
-      await addDoc(collection(db, "departments"), { name, description });
+      const protectDeletion = document.getElementById("addGroupProtectDeletion").checked;
+
+      await addDoc(collection(db, "departments"), { name, description, protectDeletion });
       document.getElementById("formAddGroup").reset();
+      document.getElementById("addGroupProtectDeletion").checked = true;
       closeModal("modalAddGroup");
       await loadDepartments();
       alert("Oddział został pomyślnie dodany!");
@@ -1666,6 +1817,7 @@
       document.getElementById("editGroupId").value = g.id;
       document.getElementById("editGroupName").value = g.name;
       document.getElementById("editGroupDesc").value = g.description || '';
+      document.getElementById("editGroupProtectDeletion").checked = g.protectDeletion !== false;
       document.getElementById("modalEditGroup").classList.remove("hidden");
     };
 
@@ -1674,20 +1826,26 @@
       const id = document.getElementById("editGroupId").value;
       await updateDoc(doc(db, "departments", id), {
         name: document.getElementById("editGroupName").value.trim(),
-        description: document.getElementById("editGroupDesc").value.trim()
+        description: document.getElementById("editGroupDesc").value.trim(),
+        protectDeletion: document.getElementById("editGroupProtectDeletion").checked
       });
       document.getElementById("modalEditGroup").classList.add("hidden");
       await loadDepartments();
     });
 
     window.deleteDept = async (id) => {
+      const g = groupsList.find(x => x.id === id);
+      if (g && g.protectDeletion !== false) {
+        alert("Nie można usunąć tego oddziału, ponieważ opcja 'Chroń przed przypadkowym usunięciem' jest włączona.");
+        return;
+      }
       if (confirm("Czy na pewno usunąć ten oddział?")) {
         await deleteDoc(doc(db, "departments", id));
         await loadDepartments();
       }
     };
 
-    // PRACOWNICY
+    // PRACOWNICI
     async function loadUsers() {
       const snapshot = await getDocs(collection(db, "users"));
       usersList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -1700,12 +1858,19 @@
 
       usersList.forEach(usr => {
         const tr = document.createElement("tr");
+        const avatarHtml = generateAvatarHtml(usr.name, usr.id, 28, 11);
+
         tr.innerHTML = `
-          <td><strong>${usr.name}</strong></td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              ${avatarHtml}
+              <strong>${usr.name}</strong>
+            </div>
+          </td>
+          <td>${usr.position || 'Pracownik'}</td>
           <td>${usr.login}</td>
           <td>${usr.department || 'Brak'}</td>
           <td><span class="badge ${usr.role === 'Administrator' ? 'badge-l4' : 'badge-normal'}">${usr.role}</span></td>
-          <td>${usr.salaryTier || 'Średnia krajowa'}</td>
           <td><strong>${usr.hourlyRate || 35} PLN/h</strong></td>
           <td>
             <button class="dots-btn" onclick="toggleUserMenu(event, '${usr.id}')">&#8942;</button>
@@ -1721,18 +1886,23 @@
       e.preventDefault();
       const newUser = {
         name: document.getElementById("addName").value.trim(),
+        position: document.getElementById("addPosition").value.trim() || "Pracownik",
+        phone: document.getElementById("addPhone").value.trim() || "-",
+        hireDate: document.getElementById("addHireDate").value || new Date().toISOString().split('T')[0],
         login: document.getElementById("addLogin").value.trim(),
         password: document.getElementById("addPassword").value.trim(),
         department: document.getElementById("addDepartment").value,
         role: document.getElementById("addRole").value,
         salaryTier: document.getElementById("addSalaryTier").value,
         hourlyRate: parseFloat(document.getElementById("addHourlyRate").value) || 35,
+        protectDeletion: document.getElementById("addProtectDeletion").checked,
         isFirstLogin: true,
         createdAt: new Date()
       };
 
       await addDoc(collection(db, "users"), newUser);
       document.getElementById("formAddUser").reset();
+      document.getElementById("addProtectDeletion").checked = true;
       closeModal("modalAddUser");
       await loadUsers();
       renderPayroll();
@@ -1761,33 +1931,35 @@
       const u = usersList.find(x => x.id === id);
       if (!u) return;
 
-      const userSchedules = scheduleList.filter(s => s.userId === u.id);
-      const totalHours = userSchedules.reduce((acc, curr) => acc + (curr.hours || 0), 0);
-      const totalPayout = (totalHours * (u.hourlyRate || 35)).toFixed(2);
-      const initials = u.name.split(" ").map(n => n[0]).join("").toUpperCase();
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const currentMonth = String(now.getMonth() + 1).padStart(2, '0');
+      const defaultMonthFilter = `${currentYear}-${currentMonth}`;
 
-      let scheduleHtml = `<div style="font-size: 12px; color: #605e5c; text-align: center; padding: 10px;">Brak wpisów w grafiku.</div>`;
-      if (userSchedules.length > 0) {
-        scheduleHtml = `<div style="display: flex; flex-direction: column; gap: 6px;">`;
-        userSchedules.forEach(s => {
-          scheduleHtml += `<div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; background: #ffffff; padding: 8px 12px; border: 1px solid #e1dfdd; border-radius: 3px;">
-            <span><strong>📅 ${s.date}</strong></span>
-            <span>🕒 ${s.timeFrom} - ${s.timeTo} <strong style="color: #0078d4; margin-left: 6px;">(${s.hours} h)</strong></span>
-          </div>`;
-        });
-        scheduleHtml += `</div>`;
-      }
+      const isProtected = u.protectDeletion !== false;
+      const avatarHtml = generateAvatarHtml(u.name, u.id, 64, 22);
 
       document.getElementById("viewUserBody").innerHTML = `
         <div class="profile-header-card">
-          <div class="profile-large-avatar">${initials}</div>
+          ${avatarHtml}
           <div>
             <div class="profile-info-title">${u.name}</div>
             <div class="profile-info-subtitle">
+              <span>💼 ${u.position || 'Pracownik'}</span> &bull; 
               <span>🏢 ${u.department || 'Brak oddziału'}</span> &bull; 
               <span class="badge ${u.role === 'Administrator' ? 'badge-l4' : 'badge-normal'}">${u.role}</span>
             </div>
           </div>
+        </div>
+
+        <div style="margin-bottom: 14px; background: #faf9f8; border: 1px solid #e1dfdd; padding: 10px 14px; border-radius: 4px; display: flex; align-items: center; justify-content: space-between;">
+          <label style="font-weight: 600; font-size: 13px; color: #323130;">🗓️ Rozliczenie wynagrodzenia za okres:</label>
+          <select id="userPayoutPeriodSelect" class="form-control" style="width: 220px;" onchange="calculateUserPayoutPeriod('${u.id}')">
+            <option value="current_month" selected>Bieżący miesiąc (${defaultMonthFilter})</option>
+            <option value="prev_month">Poprzedni miesiąc</option>
+            <option value="last_30">Ostatnie 30 dni</option>
+            <option value="all">Wszystkie wpisy</option>
+          </select>
         </div>
 
         <div class="profile-stats-grid">
@@ -1796,31 +1968,109 @@
             <div class="profile-stat-value">💰 ${u.hourlyRate || 35} PLN/h</div>
           </div>
           <div class="profile-stat-box">
-            <div class="profile-stat-label">Próg płacowy</div>
-            <div class="profile-stat-value" style="font-size: 13px; line-height: 1.4; margin-top: 2px;">📊 ${u.salaryTier || 'Średnia krajowa'}</div>
+            <div class="profile-stat-label">Telefon / Zatrundienie</div>
+            <div class="profile-stat-value" style="font-size: 12px; line-height: 1.4; margin-top: 2px;">📞 ${u.phone || '-'}<br>📅 Od: ${u.hireDate || '-'}</div>
           </div>
           <div class="profile-stat-box">
             <div class="profile-stat-label">Przepracowane godziny</div>
-            <div class="profile-stat-value">⏱️ ${totalHours} h</div>
+            <div class="profile-stat-value" id="profilePeriodHours">⏱️ 0 h</div>
           </div>
           <div class="profile-stat-box">
             <div class="profile-stat-label">Szacowane wynagrodzenie</div>
-            <div class="profile-stat-value" style="color: #107c41;">💵 ${totalPayout} PLN</div>
+            <div class="profile-stat-value" style="color: #107c41;" id="profilePeriodPayout">💵 0.00 PLN</div>
           </div>
         </div>
 
-        <div style="margin-bottom: 6px; font-weight: 600; font-size: 13px; color: #605e5c;">Dane uwierzytelniające:</div>
-        <div style="background: #faf9f8; border: 1px solid #e1dfdd; border-radius: 4px; padding: 10px 14px; margin-bottom: 16px; font-size: 13px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+        <div style="margin-bottom: 6px; font-weight: 600; font-size: 13px; color: #605e5c;">Dane uwierzytelniające i zabezpieczenia:</div>
+        <div style="background: #faf9f8; border: 1px solid #e1dfdd; border-radius: 4px; padding: 10px 14px; margin-bottom: 16px; font-size: 13px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: center;">
           <div><strong>Login:</strong> ${u.login}</div>
-          <div><strong>Hasło:</strong> ${u.password}</div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <strong>Hasło:</strong> 
+            <span id="pwdDisplay" style="letter-spacing: 2px; font-weight: 600;">••••••••</span>
+            <button type="button" class="btn-ms btn-secondary" style="height: 24px; padding: 0 6px; font-size: 11px;" onclick="togglePasswordView('${u.password}')" id="pwdToggleBtn">👁️ Pokaż</button>
+          </div>
+          <div style="grid-column: span 2; margin-top: 4px;">
+            <strong>Ochrona przed usunięciem:</strong> ${isProtected ? '<span style="color: #107c41; font-weight: 600;">Włączona (Chronione) 🔒</span>' : '<span style="color: #a80000; font-weight: 600;">Wyłączona</span>'}
+          </div>
         </div>
 
-        <div style="margin-bottom: 6px; font-weight: 600; font-size: 13px; color: #605e5c;">Harmonogram pracy pracownika:</div>
-        <div class="profile-schedule-box">
-          ${scheduleHtml}
+        <div style="margin-bottom: 6px; font-weight: 600; font-size: 13px; color: #605e5c;">Harmonogram pracy w wybranym okresie:</div>
+        <div class="profile-schedule-box" id="profilePeriodScheduleList">
+          Ładowanie grafiku...
         </div>
       `;
+
       document.getElementById("modalViewUser").classList.remove("hidden");
+      calculateUserPayoutPeriod(u.id);
+    };
+
+    window.calculateUserPayoutPeriod = (userId) => {
+      const u = usersList.find(x => x.id === userId);
+      if (!u) return;
+
+      const period = document.getElementById("userPayoutPeriodSelect").value;
+      const userSchedules = scheduleList.filter(s => s.userId === u.id);
+
+      const now = new Date();
+      let filteredSchedules = [];
+
+      if (period === "current_month") {
+        const curY = now.getFullYear();
+        const curM = now.getMonth();
+        filteredSchedules = userSchedules.filter(s => {
+          const d = new Date(s.date);
+          return d.getFullYear() === curY && d.getMonth() === curM;
+        });
+      } else if (period === "prev_month") {
+        const prevMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        const prevY = prevMonthDate.getFullYear();
+        const prevM = prevMonthDate.getMonth();
+        filteredSchedules = userSchedules.filter(s => {
+          const d = new Date(s.date);
+          return d.getFullYear() === prevY && d.getMonth() === prevM;
+        });
+      } else if (period === "last_30") {
+        const past30Days = new Date();
+        past30Days.setDate(past30Days.getDate() - 30);
+        filteredSchedules = userSchedules.filter(s => new Date(s.date) >= past30Days);
+      } else {
+        filteredSchedules = userSchedules;
+      }
+
+      const totalHours = filteredSchedules.reduce((acc, curr) => acc + (curr.hours || 0), 0);
+      const totalPayout = (totalHours * (u.hourlyRate || 35)).toFixed(2);
+
+      document.getElementById("profilePeriodHours").textContent = `⏱️ ${totalHours} h`;
+      document.getElementById("profilePeriodPayout").textContent = `💵 ${totalPayout} PLN`;
+
+      const schedContainer = document.getElementById("profilePeriodScheduleList");
+      if (filteredSchedules.length === 0) {
+        schedContainer.innerHTML = `<div style="font-size: 12px; color: #605e5c; text-align: center; padding: 10px;">Brak wpisów w grafiku w tym okresie.</div>`;
+      } else {
+        let scheduleHtml = `<div style="display: flex; flex-direction: column; gap: 6px;">`;
+        filteredSchedules.forEach(s => {
+          scheduleHtml += `<div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; background: #ffffff; padding: 8px 12px; border: 1px solid #e1dfdd; border-radius: 3px;">
+            <span><strong>📅 ${s.date}</strong></span>
+            <span>🕒 ${s.timeFrom} - ${s.timeTo} <strong style="color: #0078d4; margin-left: 6px;">(${s.hours} h)</strong></span>
+          </div>`;
+        });
+        scheduleHtml += `</div>`;
+        schedContainer.innerHTML = scheduleHtml;
+      }
+    };
+
+    window.togglePasswordView = (plainPassword) => {
+      const span = document.getElementById("pwdDisplay");
+      const btn = document.getElementById("pwdToggleBtn");
+      if (span.textContent === "••••••••") {
+        span.textContent = plainPassword;
+        span.style.letterSpacing = "normal";
+        btn.textContent = "🔒 Ukryj";
+      } else {
+        span.textContent = "••••••••";
+        span.style.letterSpacing = "2px";
+        btn.textContent = "👁️ Pokaż";
+      }
     };
 
     window.openEditUser = (id) => {
@@ -1829,12 +2079,16 @@
 
       document.getElementById("editUserId").value = u.id;
       document.getElementById("editName").value = u.name;
+      document.getElementById("editPosition").value = u.position || '';
+      document.getElementById("editPhone").value = u.phone || '';
+      document.getElementById("editHireDate").value = u.hireDate || '';
       document.getElementById("editLogin").value = u.login;
       document.getElementById("editPassword").value = u.password;
       document.getElementById("editDepartment").value = u.department || 'Brak';
       document.getElementById("editRole").value = u.role;
       document.getElementById("editSalaryTier").value = u.salaryTier || 'Średnia krajowa';
       document.getElementById("editHourlyRate").value = u.hourlyRate || 35;
+      document.getElementById("editProtectDeletion").checked = u.protectDeletion !== false;
 
       const userSchedules = scheduleList.filter(s => s.userId === u.id);
       const schedListContainer = document.getElementById("editUserScheduleList");
@@ -1859,12 +2113,16 @@
       const id = document.getElementById("editUserId").value;
       const updatedData = {
         name: document.getElementById("editName").value.trim(),
+        position: document.getElementById("editPosition").value.trim(),
+        phone: document.getElementById("editPhone").value.trim(),
+        hireDate: document.getElementById("editHireDate").value,
         login: document.getElementById("editLogin").value.trim(),
         password: document.getElementById("editPassword").value.trim(),
         department: document.getElementById("editDepartment").value,
         role: document.getElementById("editRole").value,
         salaryTier: document.getElementById("editSalaryTier").value,
-        hourlyRate: parseFloat(document.getElementById("editHourlyRate").value) || 35
+        hourlyRate: parseFloat(document.getElementById("editHourlyRate").value) || 35,
+        protectDeletion: document.getElementById("editProtectDeletion").checked
       };
 
       await updateDoc(doc(db, "users", id), updatedData);
@@ -1874,10 +2132,68 @@
     });
 
     window.deleteUser = async (id) => {
+      const u = usersList.find(x => x.id === id);
+      if (u && u.protectDeletion !== false) {
+        alert("Nie można usunąć tego konta, ponieważ opcja 'Chroń przed przypadkowym usunięciem' jest włączona.");
+        return;
+      }
       if (confirm("Czy na pewno usunąć to konto pracownika?")) {
         await deleteDoc(doc(db, "users", id));
         await loadUsers();
         renderPayroll();
+      }
+    };
+
+    // DNI WOLNE OD PRACY (PUBLIC HOLIDAYS)
+    async function loadPublicHolidays() {
+      const snapshot = await getDocs(collection(db, "public_holidays"));
+      publicHolidaysList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      const tbody = document.getElementById("publicHolidaysTableBody");
+      tbody.innerHTML = "";
+
+      if (publicHolidaysList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3">Brak zaplanowanych dni wolnych od pracy.</td></tr>`;
+        return;
+      }
+
+      publicHolidaysList.forEach(h => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>🔴 ${h.name}</strong></td>
+          <td>${h.startDate} do ${h.endDate}</td>
+          <td>
+            ${currentUser.role === 'Administrator' ? `<button class="btn-ms btn-secondary" onclick="deletePublicHoliday('${h.id}')">Usuń</button>` : '-'}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    document.getElementById("formAddPublicHoliday").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("holidayName").value.trim();
+      const startDate = document.getElementById("holidayDateFrom").value;
+      const endDate = document.getElementById("holidayDateTo").value;
+
+      await addDoc(collection(db, "public_holidays"), {
+        name,
+        startDate,
+        endDate,
+        createdAt: new Date()
+      });
+
+      document.getElementById("formAddPublicHoliday").reset();
+      await loadPublicHolidays();
+      renderScheduleCalendar();
+      alert("Dzień wolny został dodany do systemu i oznaczony w grafiku!");
+    });
+
+    window.deletePublicHoliday = async (id) => {
+      if (confirm("Czy na pewno usunąć ten dzień wolny?")) {
+        await deleteDoc(doc(db, "public_holidays", id));
+        await loadPublicHolidays();
+        renderScheduleCalendar();
       }
     };
 
@@ -1948,14 +2264,6 @@
       dayHeader.textContent = dayNum;
       cell.appendChild(dayHeader);
 
-      const daySchedules = scheduleList.filter(s => {
-        if (s.date !== dateStr) return false;
-        if (currentUser && currentUser.role === 'Pracownik') {
-          return s.userId === currentUser.id;
-        }
-        return true;
-      });
-      
       const shiftsContainer = document.createElement("div");
       shiftsContainer.style.display = "flex";
       shiftsContainer.style.flexDirection = "column";
@@ -1963,27 +2271,55 @@
       shiftsContainer.style.overflowY = "auto";
       shiftsContainer.style.maxHeight = "90px";
 
-      daySchedules.forEach(sch => {
-        const usr = usersList.find(u => u.id === sch.userId);
-        const name = usr ? usr.name.split(" ")[0] : 'Pracownik';
-        
-        const badge = document.createElement("div");
-        badge.className = "shift-badge";
-        badge.innerHTML = `<span><strong>${name}</strong>: ${sch.timeFrom}-${sch.timeTo}</span>`;
-        
-        if (currentUser && currentUser.role === 'Administrator') {
-          const delBtn = document.createElement("button");
-          delBtn.textContent = "×";
-          delBtn.title = "Usuń zmianę";
-          delBtn.onclick = (e) => {
-            e.stopPropagation();
-            deleteSchedule(sch.id);
-          };
-          badge.appendChild(delBtn);
-        }
+      const holiday = publicHolidaysList.find(h => dateStr >= h.startDate && dateStr <= h.endDate);
+      if (holiday) {
+        const holidayBadge = document.createElement("div");
+        holidayBadge.className = "shift-badge holiday-badge";
+        holidayBadge.innerHTML = `<span>🔴 Dzień wolny: <strong>${holiday.name}</strong></span>`;
+        shiftsContainer.appendChild(holidayBadge);
+      } else {
+        const daySchedules = scheduleList.filter(s => {
+          if (s.date !== dateStr) return false;
+          if (currentUser && currentUser.role === 'Pracownik') {
+            return s.userId === currentUser.id;
+          }
+          return true;
+        });
 
-        shiftsContainer.appendChild(badge);
-      });
+        daySchedules.forEach(sch => {
+          const usr = usersList.find(u => u.id === sch.userId);
+          const name = usr ? usr.name.split(" ")[0] : 'Pracownik';
+          
+          const activeLeave = calendarEvents.find(evt => 
+            evt.userId === sch.userId && 
+            (evt.type.includes("Urlop") || evt.type.includes("L4")) && 
+            dateStr >= evt.startDate && 
+            dateStr <= evt.endDate
+          );
+
+          const badge = document.createElement("div");
+          if (activeLeave) {
+            badge.className = "shift-badge leave-badge";
+            badge.innerHTML = `<span><strong>${name}</strong>: ${activeLeave.type}</span>`;
+          } else {
+            badge.className = "shift-badge";
+            badge.innerHTML = `<span><strong>${name}</strong>: ${sch.timeFrom}-${sch.timeTo}</span>`;
+          }
+          
+          if (currentUser && currentUser.role === 'Administrator') {
+            const delBtn = document.createElement("button");
+            delBtn.textContent = "×";
+            delBtn.title = "Usuń zmianę";
+            delBtn.onclick = (e) => {
+              e.stopPropagation();
+              deleteSchedule(sch.id);
+            };
+            badge.appendChild(delBtn);
+          }
+
+          shiftsContainer.appendChild(badge);
+        });
+      }
 
       cell.appendChild(shiftsContainer);
       grid.appendChild(cell);
@@ -2015,6 +2351,7 @@
       }
 
       document.getElementById("formAddSchedule").reset();
+      closeModal("modalGenerateSchedule");
       await loadSchedules();
       renderPayroll();
       alert("Grafik został wygenerowany i zaktualizowany w kalendarzu!");
@@ -2048,7 +2385,6 @@
       sentTbody.innerHTML = "";
       trashTbody.innerHTML = "";
 
-      // 1. Wysłane (które nie są w koszu użytkownika)
       const sentMessages = messagesList.filter(m => m.senderId === currentUser.id && !m.deletedBySender);
       if (sentMessages.length === 0) {
         sentTbody.innerHTML = `<tr><td colspan="5">Brak wysłanych wiadomości.</td></tr>`;
@@ -2070,7 +2406,6 @@
         });
       }
 
-      // 2. Odebrane (bezpośrednio do niego lub na jego oddział, nie w koszu)
       const inboxMessages = messagesList.filter(m => {
         if (m.deletedForRecipient) return false;
         if (m.recipientType === 'user' && m.recipientId === currentUser.id) return true;
@@ -2103,7 +2438,6 @@
         });
       }
 
-      // 3. Kosz (wiadomości usunięte przez aktualnego użytkownika)
       const trashMessages = messagesList.filter(m => {
         if (m.senderId === currentUser.id && m.deletedBySender) return true;
         if (m.recipientType === 'user' && m.recipientId === currentUser.id && m.deletedForRecipient) return true;
@@ -2215,7 +2549,6 @@
       await loadMessages();
     });
 
-    // MASOWE OPERACJE
     window.toggleAllInbox = (master) => {
       document.querySelectorAll(".inbox-checkbox").forEach(cb => cb.checked = master.checked);
     };
@@ -2424,6 +2757,7 @@
 
       await loadLeaveRequests();
       await loadCalendarEvents();
+      renderScheduleCalendar();
     };
 
     window.deleteLeaveRequest = async (id) => {
@@ -2436,32 +2770,6 @@
     async function loadCalendarEvents() {
       const snapshot = await getDocs(collection(db, "calendar"));
       calendarEvents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-      const tbody = document.getElementById("calendarEventsTableBody");
-      tbody.innerHTML = "";
-
-      const filteredEvents = currentUser.role === 'Administrator'
-        ? calendarEvents
-        : calendarEvents.filter(evt => evt.userId === currentUser.id || evt.type === "Święto");
-
-      filteredEvents.forEach(evt => {
-        let name = "Wszyscy (Święto)";
-        if (evt.userId) {
-          const u = usersList.find(x => x.id === evt.userId);
-          if (u) name = u.name;
-        }
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td><strong>${name}</strong></td>
-          <td><span class="badge ${evt.type === 'Urlop' ? 'badge-urlop' : (evt.type === 'L4' ? 'badge-l4' : 'badge-swieto')}">${evt.type}</span></td>
-          <td>${evt.startDate} do ${evt.endDate}</td>
-          <td>
-            ${currentUser.role === 'Administrator' ? `<button class="btn-ms btn-secondary" onclick="deleteCalEvent('${evt.id}')">Usuń</button>` : '-'}
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
 
       renderCurrentEmployeeStatus();
     }
@@ -2476,13 +2784,15 @@
         : usersList.filter(u => u.id === currentUser.id);
 
       targetUsers.forEach(usr => {
-        const activeEvt = calendarEvents.find(evt => (evt.userId === usr.id || evt.type === "Święto") && (today >= evt.startDate && today <= evt.endDate));
+        const activeEvt = calendarEvents.find(evt => (evt.userId === usr.id) && (today >= evt.startDate && today <= evt.endDate));
+        const activeHoliday = publicHolidaysList.find(h => today >= h.startDate && today <= h.endDate);
 
         let statusBadge = `<span class="badge badge-normal">Pracuje normalnie</span>`;
-        if (activeEvt) {
+        if (activeHoliday) {
+          statusBadge = `<span class="badge badge-swieto">Dzień wolny (${activeHoliday.name})</span>`;
+        } else if (activeEvt) {
           if (activeEvt.type.includes("Urlop")) statusBadge = `<span class="badge badge-urlop">Urlop</span>`;
           if (activeEvt.type.includes("L4")) statusBadge = `<span class="badge badge-l4">L4 (Zwolnienie)</span>`;
-          if (activeEvt.type === "Święto") statusBadge = `<span class="badge badge-swieto">Dzień wolny (Święto)</span>`;
         }
 
         const tr = document.createElement("tr");
@@ -2495,13 +2805,6 @@
       });
     }
 
-    window.deleteCalEvent = async (id) => {
-      if (confirm("Usuń wpis z kalendarza?")) {
-        await deleteDoc(doc(db, "calendar", id));
-        await loadCalendarEvents();
-      }
-    };
-
     // KSIĘGOWOŚĆ I PŁACE
     function renderPayroll() {
       const tbody = document.getElementById("payrollTableBody");
@@ -2513,8 +2816,14 @@
 
       if (targetUsers.length === 0) {
         tbody.innerHTML = `<tr><td colspan="6">Brak danych o wynagrodzeniach.</td></tr>`;
+        document.getElementById("kpiTotalPayout").textContent = "0.00 PLN";
+        document.getElementById("kpiTotalHours").textContent = "0 h";
+        document.getElementById("kpiTotalEmployees").textContent = "0";
         return;
       }
+
+      let grandTotalPayout = 0;
+      let grandTotalHours = 0;
 
       targetUsers.forEach(usr => {
         const userSchedules = scheduleList.filter(s => s.userId === usr.id);
@@ -2533,23 +2842,37 @@
         });
 
         const hourlyRate = usr.hourlyRate || 35;
-        const totalPayout = (totalHours * hourlyRate).toFixed(2);
+        const totalPayout = totalHours * hourlyRate;
+
+        grandTotalPayout += totalPayout;
+        grandTotalHours += totalHours;
+
+        const avatarHtml = generateAvatarHtml(usr.name, usr.id, 24, 10);
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td><strong>${usr.name}</strong></td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              ${avatarHtml}
+              <strong>${usr.name}</strong>
+            </div>
+          </td>
           <td>${usr.department || 'Brak'}</td>
-          <td>${hourlyRate} PLN/h (${usr.salaryTier || 'Średnia krajowa'})</td>
+          <td>${hourlyRate.toFixed(2)} PLN/h <span style="font-size: 11px; color: #605e5c;">(${usr.salaryTier || 'Średnia krajowa'})</span></td>
           <td><strong>${totalHours} h</strong></td>
-          <td>L4: ${l4Days} d. | Urlop: ${urlopDays} d.</td>
-          <td><strong style="color: #107c41; font-size: 14px;">${totalPayout} PLN</strong></td>
+          <td><span style="color: #a80000;">L4: ${l4Days} d.</span> | <span style="color: #797775;">Urlop: ${urlopDays} d.</span></td>
+          <td><strong style="color: #107c41; font-size: 14px;">${totalPayout.toFixed(2)} PLN</strong></td>
         `;
         tbody.appendChild(tr);
       });
+
+      document.getElementById("kpiTotalPayout").textContent = grandTotalPayout.toFixed(2) + " PLN";
+      document.getElementById("kpiTotalHours").textContent = grandTotalHours + " h";
+      document.getElementById("kpiTotalEmployees").textContent = targetUsers.length;
     }
 
     async function loadAllData() {
-      await Promise.all([loadDepartments(), loadUsers(), loadCalendarEvents(), loadSchedules(), loadLeaveRequests(), loadMessages()]);
+      await Promise.all([loadDepartments(), loadUsers(), loadPublicHolidays(), loadCalendarEvents(), loadSchedules(), loadLeaveRequests(), loadMessages()]);
       renderPayroll();
     }
   </script>
